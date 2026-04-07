@@ -19,9 +19,9 @@ interface componentsProps {
 
 const CustomTable: React.FC<componentsProps> = (props) => {
     return (
-        <div className="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+        <div className="shadow overflow-hidden rounded-lg">
             <table className="min-w-full text-sm text-left text-gray-700 ">
-                <thead className="bg-slate-100 text-xs text-gray-600 uppercase">
+                <thead className=" text-xs text-txt-main uppercase m-2 bg-appbg-section border border-white/20">
                     <tr>
                         <th className="px-6 py-3">Leave type</th>
                         <th className="px-6 py-3">From</th>
@@ -34,22 +34,22 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                     </tr>
                 </thead>
 
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="">
                     {
                         props.data.map((ele) => (
-                            <tr className="hover:bg-slate-50 transition">
-                                <td className="px-6 py-4 font-medium text-gray-900 flex gap-2 items-center">
+                            <tr className=" transition bg-appbg-section border border-white/20">
+                                <td className="px-6 py-4 font-medium text-txt-sub flex gap-2 items-center">
                                     <div className="size-2 rounded-full bg-red-300" />
                                     {ele.leaveType}
                                 </td>
-                                <td className="px-6 py-4">{ele.from}</td>
-                                <td className="px-6 py-4">{ele.to}</td>
-                                <td className="px-6 py-4">{ele.days}</td>
-                                <td className="px-6 py-4">{ele.reason}</td>
+                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.from}</td>
+                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.to}</td>
+                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.days}</td>
+                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.reason}</td>
                                 <td className="px-6 py-4">
                                     <Badge type={ele.status}>{ele.status}</Badge>
                                 </td>
-                                <td className="px-6 py-4">{ele.approvedby}</td>
+                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.approvedby}</td>
                                 <td className="px-6 py-4">
                                     <button 
                                     onClick={()=> props.onClick(ele.id)}
