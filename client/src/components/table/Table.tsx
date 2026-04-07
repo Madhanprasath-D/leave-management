@@ -66,7 +66,7 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className='bg-sky-400/30 border border-sky-400 p-3 px-4 flex flex-col gap-3 rounded-md '>
+                                            <div className='bg-gray-400/30 border border-gray-400 p-3 px-4 flex flex-col gap-3 rounded-md '>
                                                 <div className='flex items-center justify-between'>
                                                     <h2 className=' uppercase text-sm font-medium text-txt-main'>Duration</h2>
                                                     <h2 className='text-sm text-black'>{ele.days} Days</h2>
@@ -78,15 +78,16 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                             </div>
                                             <div className='flex flex-col gap-2 rounded-md text-wrap'>
                                                 <h1 className='text-sm text-txt-main'>Reason</h1>
-                                                <h6 className='text-wrap text-xs text-txt-sub px-2'>{ele.reason} ddddddddddddddddddddddddddddddddd
-                                                    dddddddffffffffffffffffaffafafafafafafafffsfsfsafafafafafsfsfs
-                                                    daadadada
-                                                </h6>
+                                                <textarea name="" id="" 
+                                                value={ele.reason}
+                                                disabled
+                                                className='text-sm w-full h-28 border p-2 bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+                                                    focus:ring-2 focus:ring-blue-500 rounded-lg 
+                                                    focus:border-transparent'></textarea>
                                             </div>
                                             <div className='flex flex-col gap-2 rounded-md text-wrap'>
                                                 <h1 className='text-sm text-txt-main'>Comment</h1>
                                                 <textarea name="" id="" 
-                                                value={""}
                                                 disabled={ele.status.toLocaleLowerCase() != 'pending'}
                                                 className='w-full h-28 border p-2 bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
                                                     focus:ring-2 focus:ring-blue-500 rounded-lg 

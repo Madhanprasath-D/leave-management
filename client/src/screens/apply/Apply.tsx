@@ -1,9 +1,10 @@
 import React from 'react'
 import Select from 'react-select'
 import CustomDatePicker from '../../components/datepicker/Datepicker'
+import { useNavigate } from 'react-router-dom'
 
 const Apply: React.FC = () => {
-
+    const navigate = useNavigate()
     const options = [
         { value: "casual", label: "Casual Leave" },
         { value: "sick", label: "Sick Leave" },
@@ -105,7 +106,7 @@ const Apply: React.FC = () => {
 
                 </div>
                 <div className='justify-end flex gap-5'>
-                    <button className='p-2 px-4 rounded-md bg-gray-200'>
+                    <button onClick={()=> navigate('/dashboard')} className='p-2 px-4 rounded-md bg-gray-200'>
                         cancel
                     </button>
                     <button className='p-2 px-4 rounded-md bg-green-300'>

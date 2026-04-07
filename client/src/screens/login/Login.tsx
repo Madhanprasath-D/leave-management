@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Login: React.FC = () => {
     const navigate = useNavigate()
+    const { login } = useUser();
 
     const [showPassword, setShowpassword] = useState<boolean>(false)
     const menu: LavelValue[] = [
@@ -16,6 +17,24 @@ const Login: React.FC = () => {
             value: "sign-up"
         }
     ]
+
+
+    const handleLogin = (role: "employee" | "manager") => {
+        const mockUser = {
+            id: 1,
+            name: "Madhan",
+            role,
+            email: ''
+        };
+
+        login(mockUser);
+
+        if (role === "employee") {
+            navigate("/employee");
+        } else {
+            navigate("/manager");
+        }
+    };
 
     return (
         <div className='w-full h-full flex items-center justify-center'>
@@ -45,16 +64,16 @@ const Login: React.FC = () => {
                         {/* TODO: by madhan need to design forget password. */}
                         <div className='flex justify-between'>
                             <h6 className='text-sm font-bold text-gray-700 mb-1'>Password</h6>
-                            <h6 
-                            onClick={()=>{}}
-                            className='text-sm font-bold text-purple-400 mb-1 cursor-pointer hover:text-purple-600'>Forget password?</h6>
+                            <h6
+                                onClick={() => { }}
+                                className='text-sm font-bold text-purple-400 mb-1 cursor-pointer hover:text-purple-600'>Forget password?</h6>
                         </div>
                         <div className='flex items-center gap-3'>
                             <input
                                 className='p-2 border-2 border-gray-300 w-full rounded-md'
-                                type={!showPassword? 'password': 'text'} placeholder='Enter your password'/>
+                                type={!showPassword ? 'password' : 'text'} placeholder='Enter your password' />
                             <div className='size-4 bg-emerald-300'
-                            onClick={()=> setShowpassword(!showPassword)}
+                                onClick={() => setShowpassword(!showPassword)}
                             ></div>
                         </div>
                     </div>
@@ -65,7 +84,7 @@ const Login: React.FC = () => {
                     </div>
                 </div>
                 <div>
-                    <h5>Don't have an account yet? <span className='text-purple-400 cursor-pointer hover:text-purple-600 ml-1 font-medium' onClick={()=> navigate('/sign-up')}>Sign-up</span></h5>
+                    <h5>Don't have an account yet? <span className='text-purple-400 cursor-pointer hover:text-purple-600 ml-1 font-medium' onClick={() => navigate('/sign-up')}>Sign-up</span></h5>
                 </div>
             </div>
         </div>
