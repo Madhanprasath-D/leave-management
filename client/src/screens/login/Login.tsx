@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import type { LavelValue } from '../../utils/Types'
 import { useNavigate } from 'react-router-dom'
+import { useUser } from '../../contexts/auth/UserContext'
 
 const Login: React.FC = () => {
     const navigate = useNavigate()
@@ -17,7 +18,6 @@ const Login: React.FC = () => {
             value: "sign-up"
         }
     ]
-
 
     const handleLogin = (role: "employee" | "manager") => {
         const mockUser = {
