@@ -35,6 +35,12 @@ const Layout: React.FC = () => {
             link: '/request',
             icon: <Users size={20} />,
             role: ['ADMIN']
+        },{
+            label: 'Members',
+            value: 'members',
+            link: '/members',
+            icon: <Users size={20} />,
+            role: ['ADMIN']
         },
     ]
 

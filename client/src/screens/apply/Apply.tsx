@@ -5,10 +5,64 @@ import CustomDatePicker from '../../components/datepicker/Datepicker'
 const Apply: React.FC = () => {
 
     const options = [
-  { value: "casual", label: "Casual Leave" },
-  { value: "sick", label: "Sick Leave" },
-  { value: "paid", label: "Paid Leave" },
-];
+        { value: "casual", label: "Casual Leave" },
+        { value: "sick", label: "Sick Leave" },
+        { value: "paid", label: "Paid Leave" },
+    ];
+
+    const customStyles = {
+        control: (base, state) => ({
+            ...base,
+            backgroundColor: "#1e293b",
+            borderColor: state.isFocused ? "#3B82F6" : "#334155",
+            boxShadow: state.isFocused ? "0 0 0 2px #3B82F6" : "none",
+            borderRadius: "8px",
+            padding: "2px",
+            "&:hover": {
+                borderColor: "#3B82F6",
+            },
+        }),
+
+        menu: (base) => ({
+            ...base,
+            backgroundColor: "#1F263B",
+            borderRadius: "8px",
+            overflow: "hidden",
+        }),
+
+        option: (base, state) => ({
+            ...base,
+            backgroundColor: state.isFocused
+                ? "#1F263B"
+                : state.isSelected
+                    ? "#3B82F6"
+                    : "transparent",
+            color: "white",
+            cursor: "pointer",
+        }),
+
+        singleValue: (base) => ({
+            ...base,
+            color: "white",
+        }),
+
+        placeholder: (base) => ({
+            ...base,
+            color: "#94A3B8",
+        }),
+
+        dropdownIndicator: (base) => ({
+            ...base,
+            color: "#94A3B8",
+            "&:hover": {
+                color: "white",
+            },
+        }),
+
+        indicatorSeparator: () => ({
+            display: "none",
+        }),
+    };
 
     return (
         <div className='p-4'>
@@ -21,7 +75,7 @@ const Apply: React.FC = () => {
                     <div className='w-1/2 flex flex-col gap-3'>
                         <div >
                             <h6 className='text-sm font-bold text-txt-sub mb-1'>Email address</h6>
-                            <Select />
+                            <Select options={options} styles={customStyles}/>
                         </div>
                         <div >
                             <h6 className='text-sm font-bold text-txt-sub mb-1'>From</h6>
