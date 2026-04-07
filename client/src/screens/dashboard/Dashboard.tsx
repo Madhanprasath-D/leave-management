@@ -9,6 +9,7 @@ const Dashboard: React.FC = () => {
             value: '20'
         },
         {
+            label: 'Pending Request',
             value: '5'
         },
         {
