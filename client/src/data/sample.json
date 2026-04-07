@@ -1,0 +1,114 @@
+{
+    "leave": [
+        {
+            "id": "1",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "pending",
+            "approvedby": "admin"
+        },
+        {   
+            "id": "2",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "pending",
+            "approvedby": "admin"
+        },
+        {
+            "id": "3",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "pending",
+            "approvedby": "admin"
+        },
+        {
+            "id": "4",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "rejected",
+            "approvedby": "admin"
+        },
+        {
+            "id": "5",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "pending",
+            "approvedby": "admin"
+        },
+        {
+            "id": "6",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "pending",
+            "approvedby": "admin"
+        },
+        {
+            "id": "7",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "pending",
+            "approvedby": "admin"
+        },
+        {
+            "id": "8",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "pending",
+            "approvedby": "admin"
+        },
+        {
+            "id": "9",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "pending",
+            "approvedby": "admin"
+        },
+        {
+            "id": "10",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "approved",
+            "approvedby": "admin"
+        },
+        {
+            "id": "11",
+            "leaveType" : "Sick Leave",
+            "from": "April 07, 2026",
+            "to": "April 09, 2026",
+            "days": "3",
+            "reason": "high fever",
+            "status": "pending",
+            "approvedby": "admin"
+        }
+    ]
+}

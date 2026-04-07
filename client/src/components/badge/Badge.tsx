@@ -1,0 +1,21 @@
+import React, { type PropsWithChildren } from 'react'
+interface BadgeProps extends PropsWithChildren {
+    type: string
+}
+const Badge: React.FC<BadgeProps> = (props) => {
+    var bg = ''
+    if(props.type.toLocaleLowerCase() == 'approved'){
+        bg = 'bg-emerald-400/40'
+    } else if (props.type.toLocaleLowerCase() == 'pending'){
+        bg = 'bg-yellow-400/40'
+    } else {
+        bg = 'bg-red-400/40'
+    }
+    return (
+        <div className={'p-0.5 px-2 rounded-md  text-center w-max ' + bg}>
+            <h5 className='text-xs'>{props.children}</h5>
+        </div>
+    )
+}
+
+export default Badge

@@ -10,7 +10,8 @@ export default {
         manrope: ["Manrope", "sans-serif"] 
       },
       colors:{
-        'button': '#64748b'
+        'button': '#64748b',
+        'subtext': ''
       }
     },
   },
