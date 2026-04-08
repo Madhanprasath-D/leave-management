@@ -20,6 +20,92 @@ A full-stack employee leave management application built with **React + TypeScri
 ---
 
 
+
+---
+
+##  Getting Started
+
+### Prerequisites
+
+- Node.js v18+
+- PostgreSQL database (local or hosted, e.g. [Neon](https://neon.tech))
+
+---
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Madhanprasath-D/leave-management.git
+cd leave-management
+```
+
+---
+
+### 2. Set Up the Database
+
+Run the seed file against your PostgreSQL instance:
+
+```bash
+psql -U <your_user> -d <your_database> -f db/Seed.sql
+```
+
+This creates the `users` and `leaves` tables and inserts a default manager account.
+
+> **Default Manager Account:**
+> - Email: `admin@gmail.com`
+> - Password: `admin@123`
+
+>  **Important:** The seed file inserts the admin password as plain text. Before using in any environment, hash the password using bcrypt and update the record.
+
+---
+
+### 3. Configure the Server
+
+Create a `.env` file inside the `server/` directory:
+
+```env
+DATABASE_URL=postgresql://<user>:<password>@<host>/<database>?sslmode=require
+PORT=5005
+JWT_SECRET=madhan
+CORS=http://localhost:5004
+```
+
+---
+
+### 4. Install & Run the Server
+
+```bash
+cd server
+npm install
+npm run dev       # Development (nodemon)
+# or
+npm start         # Production
+```
+
+Server runs on: `http://localhost:5005`
+
+---
+
+### 5. Install & Run the Client
+
+Create a `.env` file inside the `client/` directory:
+
+```env
+VITE_API_URL="http://localhost:5005/api"
+```
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+Client runs on: `http://localhost:5004`
+
+---
+
+
+
 ##  Workflow & System Design
 
 ###  Current Architecture
