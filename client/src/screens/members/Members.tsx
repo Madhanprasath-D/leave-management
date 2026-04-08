@@ -1,9 +1,7 @@
-import { CalendarCheck2, ClipboardClock, TicketCheck } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import jsondata from '../../data/sample.json'
 import MembersCard from '../../components/card/MembersCard'
 import { GetUsers } from '../../invoke/InvokeAPI'
-const Members: React.FC = (props) => {
+const Members: React.FC = () => {
 
     const [members, setMembers] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);

@@ -25,7 +25,7 @@ router.get("/leaves", authMiddleware, getLeaves);
 router.get("/leaves/:id", authMiddleware, getLeaves);
 
 router.post("/leaves/apply", authMiddleware, applyLeave);
-router.patch("/leaves/apply/:id", authMiddleware, updateLeave);
+router.patch("/leaves/:id/update", authMiddleware, updateLeave);
 router.delete("/leaves/:id/cancel", authMiddleware, cancelLeave);
 
 router.get("/meta", authMiddleware, getMeta);

@@ -20,7 +20,7 @@ interface TableDataInfo {
 interface componentsProps {
     data: TableDataInfo[]
     role: string
-    onApprove?: (e: any) => void
+    onUpdate: (e: any, isApproved: boolean, msg: string) => void
     onCancel: (e: any) => void
 }
 
@@ -35,7 +35,7 @@ const CustomTable: React.FC<componentsProps> = (props) => {
         const diffInMs = end.getTime() - start.getTime();
         return Math.ceil(diffInMs / (1000 * 60 * 60 * 24)) + 1;
     }
-    
+
     return (
         <div className="shadow box-border overflow-x-auto rounded-lg">
             <table className=" md:table-fixed min-w-full md:w-full text-sm text-left text-gray-700 ">
@@ -114,11 +114,13 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                             <div className='justify-center flex gap-5'>
                                                 {props.role == 'manager' ? <>
                                                     <button
+                                                        onClick={() => props.onUpdate(ele.id, false, msg)}
                                                         disabled={ele.status.toLowerCase() != 'pending'}
                                                         className='p-2 px-4 rounded-md bg-red-300 hover:bg-red-300/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'>
                                                         Reject
                                                     </button>
                                                     <button
+                                                        onClick={() => props.onUpdate(ele.id, true, msg)}
                                                         disabled={ele.status.toLowerCase() != 'pending'}
                                                         className='p-2 px-4 rounded-md bg-button-primary hover:bg-button-primary/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'>
                                                         Approve

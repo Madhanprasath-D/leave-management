@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CustomTable from '../../components/table/Table'
 import { useUser } from '../../contexts/auth/UserContext'
-import jsondata from '../../data/sample.json'
 import { CancelLeave, GetLeaves } from '../../invoke/InvokeAPI'
 
 const UserDashboard: React.FC = () => {
@@ -95,7 +94,7 @@ const UserDashboard: React.FC = () => {
                     {loading ? <div className='w-full flex items-center justify-between'>
                         <LoaderCircle className=' animate-spin' color='white' />
                     </div> :
-                        <CustomTable data={leaveData} onCancel={(e) => handleCancel(e)} role={user?.role as string} />}
+                        <CustomTable data={leaveData} onUpdate={()=> {}} onCancel={(e) => handleCancel(e)} role={user?.role as string} />}
                 </div>
             </div>
         </div>

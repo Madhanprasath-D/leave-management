@@ -15,15 +15,15 @@ const History: React.FC = () => {
         const fetchLeaves = async () => {
             setLoading(true);
             try {
-                var endpoint:string
-                if(user?.role == 'employee') {
+                var endpoint: string
+                if (user?.role == 'employee') {
                     endpoint = `/leaves/${user?.id}`
                 } else {
                     endpoint = `/leaves`
                 }
                 const data = await GetLeaves(endpoint);
                 console.log("Leaves:", data);
-                setLeaveData(data.filter((ele:any)=> ele.status != 'PENDING'));
+                setLeaveData(data.filter((ele: any) => ele.status != 'PENDING'));
             } catch (err) {
                 console.error(err);
             } finally {
@@ -47,9 +47,9 @@ const History: React.FC = () => {
                 </div>
                 <div>
                     {loading ? <div className='w-full flex items-center justify-between'>
-                        <LoaderCircle className=' animate-spin' color='white'/>
-                        </div> :
-                        <CustomTable data={leaveData} onCancel={() => { }} onApprove={() => { }} role={user?.role as string} />}
+                        <LoaderCircle className=' animate-spin' color='white' />
+                    </div> :
+                        <CustomTable data={leaveData} onUpdate={() => { }} onCancel={() => { }} role={user?.role as string} />}
                 </div>
             </div>
         </div>

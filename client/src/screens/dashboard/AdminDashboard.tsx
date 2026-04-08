@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import CustomTable from '../../components/table/Table'
 import { CalendarCheck2, ClipboardClock, LoaderCircle, TicketCheck } from 'lucide-react'
-import jsondata from '../../data/sample.json'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../../contexts/auth/UserContext'
-import { GetLeaves } from '../../invoke/InvokeAPI'
+import { GetLeaves, UpdateStatus } from '../../invoke/InvokeAPI'
 
 const AdminDashboard = () => {
     const navigate = useNavigate()
@@ -32,12 +31,16 @@ const AdminDashboard = () => {
         <TicketCheck size={56} strokeWidth={2} color='#94A3B8' />
     ]
 
-    const handleCancel = async (id: string) => {
-
-    };
-
-    const handelApprove = async (id: string) => {
-
+    const handleChange = async (id: string, isApproved: boolean, msg: string) => {
+        try {
+            await UpdateStatus(`/leaves/${id}/update`, JSON.stringify({
+                approved: isApproved,
+                comment: msg
+            }));
+            fetchLeaves();
+        } catch (err: any) {
+            console.error(err.message);
+        }
     };
 
     const fetchLeaves = async () => {
@@ -56,8 +59,6 @@ const AdminDashboard = () => {
     useEffect(() => {
         fetchLeaves();
     }, []);
-
-
 
 
     return (
@@ -92,7 +93,7 @@ const AdminDashboard = () => {
                     {loading ? <div className='w-full flex items-center justify-between'>
                         <LoaderCircle className=' animate-spin' color='white' />
                     </div> :
-                        <CustomTable data={leaveData} onCancel={(e) => handleCancel(e)} onApprove={(e) => handelApprove(e)} role={user?.role as string} />}
+                        <CustomTable data={leaveData}  onCancel={(e) => {}} onUpdate={(id,isApproved, msg) => handleChange(id, isApproved, msg)} role={user?.role as string} />}
                 </div>
             </div>
         </div>
