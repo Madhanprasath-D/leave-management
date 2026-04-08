@@ -25,14 +25,17 @@ interface componentsProps {
 }
 
 const CustomTable: React.FC<componentsProps> = (props) => {
-    const [loading, setLoading] = useState(false)
-    const getDays = (from: string, to:string) => {
+    const [loading, setLoading] = useState(false);
+    const [msg, setMsg] = useState('');
+
+    const getDays = (from: string, to: string) => {
         const start = new Date(from);
         const end = new Date(to);
 
-        const diffInMs = end.getTime()  - start.getTime();
+        const diffInMs = end.getTime() - start.getTime();
         return Math.ceil(diffInMs / (1000 * 60 * 60 * 24)) + 1;
     }
+    
     return (
         <div className="shadow box-border overflow-x-auto rounded-lg">
             <table className=" md:table-fixed min-w-full md:w-full text-sm text-left text-gray-700 ">
@@ -98,14 +101,16 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                                     focus:ring-2 focus:ring-blue-500 rounded-lg 
                                                     focus:border-transparent'></textarea>
                                             </div>
-                                            {ele.manager_comment || props.role == 'manager'  && <div className='flex flex-col gap-2 rounded-md text-wrap'>
+                                            {ele.manager_comment || props.role == 'manager' ? <div className='flex flex-col gap-2 rounded-md text-wrap'>
                                                 <h1 className='text-sm text-txt-main'>Comment</h1>
                                                 <textarea name="" id=""
+                                                    value={ele.manager_comment ?? msg}
+                                                    onChange={(e) => setMsg(e.target.value)}
                                                     disabled={ele.status.toLocaleLowerCase() != 'pending'}
                                                     className='w-full h-28 border p-2 bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
                                                     focus:ring-2 focus:ring-blue-500 rounded-lg 
                                                     focus:border-transparent'></textarea>
-                                            </div>}
+                                            </div> : <></>}
                                             <div className='justify-center flex gap-5'>
                                                 {props.role == 'manager' ? <>
                                                     <button
@@ -121,13 +126,13 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                                 </> :
                                                     <button
                                                         disabled={ele.status.toLowerCase() != 'pending'}
-                                                        onClick={()=> {
-                                                            setLoading(true)                                        
+                                                        onClick={() => {
+                                                            setLoading(true)
                                                             props.onCancel(ele.id)
                                                             setLoading(false)
                                                         }}
                                                         className={'p-2 px-4 rounded-md bg-red-300 hover:bg-red-300/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'}>
-                                                        {loading ? <LoaderCircle className=' animate-spin' color='white' /> :'Revoke'}
+                                                        {loading ? <LoaderCircle className=' animate-spin' color='white' /> : 'Revoke'}
                                                     </button>}
                                             </div>
                                         </div>

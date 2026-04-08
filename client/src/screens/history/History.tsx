@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import CustomTable from '../../components/table/Table'
-import jsondata from '../../data/sample.json'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../../contexts/auth/UserContext'
 import { GetLeaves } from '../../invoke/InvokeAPI'
@@ -24,7 +23,7 @@ const History: React.FC = () => {
                 }
                 const data = await GetLeaves(endpoint);
                 console.log("Leaves:", data);
-                setLeaveData(data);
+                setLeaveData(data.filter((ele:any)=> ele.status != 'PENDING'));
             } catch (err) {
                 console.error(err);
             } finally {

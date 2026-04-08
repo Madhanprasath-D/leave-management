@@ -72,3 +72,13 @@ export const GetUsers = async (path:string) => {
   }
 };
 
+export const UpdateStatus = async (path:string, data: any) => {
+  try {
+    const res = await api.patch(path, data);
+    return res.data;
+  } catch (err: any) {
+    throw new Error(err.response?.data?.message || "Cancel failed");
+  }
+};
+
+
