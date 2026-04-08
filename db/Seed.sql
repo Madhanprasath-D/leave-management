@@ -1,5 +1,7 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
@@ -7,9 +9,14 @@ CREATE TABLE users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO users (name, email, password, role)
+VALUES ('Admin', 'admin@gmail.com', 'admin@123', 'manager');
+
+
+
 CREATE TABLE leaves (
-  id SERIAL PRIMARY KEY,
-  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   leave_type TEXT CHECK (leave_type IN ('casual', 'sick', 'others')),
   start_date DATE NOT NULL,
   end_date DATE NOT NULL,
@@ -21,6 +28,3 @@ CREATE TABLE leaves (
 
 CREATE INDEX idx_user_id ON leaves(user_id);
 
-
-INSERT INTO users (name, email, password, role)
-VALUES ('Admin', 'admin@gmail.com', 'admin@123', 'manager');
