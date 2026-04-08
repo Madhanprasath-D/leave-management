@@ -70,7 +70,7 @@ All protected routes require `Authorization: Bearer <token>` header.
 | Method | Endpoint       | Description            | Auth Required |
 |--------|----------------|------------------------|---------------|
 | GET    | /api/users     | Get all employees      | Yes (manager) |
-| GET    | /api/users/:id | Get user by ID         | Yes           |
+
 
 ### Meta
 | Method | Endpoint   | Description             | Auth Required |

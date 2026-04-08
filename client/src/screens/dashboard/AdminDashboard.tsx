@@ -3,28 +3,29 @@ import CustomTable from '../../components/table/Table'
 import { CalendarCheck2, ClipboardClock, LoaderCircle, TicketCheck } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../../contexts/auth/UserContext'
-import { GetLeaves, UpdateStatus } from '../../invoke/InvokeAPI'
+import { GetLeaves, GetMetadata, UpdateStatus } from '../../invoke/InvokeAPI'
 import { SimpleSnackbar } from '../../components/toast/Toast'
 
 const AdminDashboard = () => {
     const navigate = useNavigate()
     const { user } = useUser()
     const [leaveData, setLeaveData] = useState<any[]>([]);
+    const [metadata, setMetadata] = useState<any>({});
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false)
     const [msg, setMsg] = useState('')
     const leaveOverview = [
         {
             label: 'Total leave Request',
-            value: '20'
+            value: 'total'
         },
         {
             label: 'Pending Request',
-            value: '5'
+            value: 'pending'
         },
         {
             label: 'Approved Request',
-            value: '8'
+            value: 'approved'
         }
     ]
 
@@ -61,7 +62,18 @@ const AdminDashboard = () => {
             setLoading(false);
         }
     };
+    const fetchMetadata = async () => {
+        try {
+            const endpoint = `/meta`
+            const data = await GetMetadata(endpoint);
+            setMetadata(data);
+        } catch (err: any) {
+            setMsg(err.message)
+            setOpen(true)
+        }
+    }
     useEffect(() => {
+        fetchMetadata();
         fetchLeaves();
     }, []);
 
@@ -83,30 +95,37 @@ const AdminDashboard = () => {
                     Members
                 </button>
             </div>
-            <div className='w-full  h-max flex flex-col lg:flex-row gap-3 flex-wrap'>
-                {
-                    leaveOverview.map((ele, index) => (
-                        <div className={'flex  md:flex-1 relative flex-col p-2 rounded-lg gap-2 px-5 justify-between border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl'} key={index}>
-                            <div className='flex gap-3 items-center'>
-                                <div className={'p-3 rounded-md absolute right-0 top-3 rotate-12 opacity-20'}>{icon[index]}</div>
-                                <h1 className='text-lg font-medium text-main-text'>{ele.label}</h1>
-                            </div>
-                            <h1 className='text-2xl text-main-text'>{ele.value}</h1>
+            {loading ? <div className='w-full flex items-center justify-between'>
+                <LoaderCircle className=' animate-spin' color='white' />
+            </div> :
+                <>
+                    <div className='w-full  h-max flex flex-col lg:flex-row gap-3 flex-wrap'>
+                        {
+                            leaveOverview.map((ele, index) => (
+                                <div className={'flex  md:flex-1 relative flex-col p-2 rounded-lg gap-2 px-5 justify-between border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl'} key={index}>
+                                    <div className='flex gap-3 items-center'>
+                                        <div className={'p-3 rounded-md absolute right-0 top-3 rotate-12 opacity-20'}>{icon[index]}</div>
+                                        <h1 className='text-lg font-medium text-main-text'>{ele.label}</h1>
+                                    </div>
+                                    <h1 className='text-2xl text-main-text'>{metadata[ele.value]}</h1>
+                                </div>
+                            ))
+                        }
+                    </div>
+                    <div className='w-full flex flex-col p-3 gap-4 rounded-lg border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl'>
+                        <div className='flex items-center justify-between'>
+                            <h1 className='text-txt-main'>New Leave Request</h1>
                         </div>
-                    ))
-                }
-            </div>
-            <div className='w-full flex flex-col p-3 gap-4 rounded-lg border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl'>
-                <div className='flex items-center justify-between'>
-                    <h1 className='text-txt-main'>New Leave Request</h1>
-                </div>
-                <div>
-                    {loading ? <div className='w-full flex items-center justify-between'>
-                        <LoaderCircle className=' animate-spin' color='white' />
-                    </div> :
-                        <CustomTable data={leaveData} onCancel={(e) => { }} onUpdate={(id, isApproved, msg) => handleChange(id, isApproved, msg)} role={user?.role as string} />}
-                </div>
-            </div>
+                        <div>
+                            {leaveData.length > 0 ? <CustomTable data={leaveData} onCancel={(e) => { }} onUpdate={(id, isApproved, msg) => handleChange(id, isApproved, msg)} role={user?.role as string} /> :
+                                <div className='flex items-center justify-center w-full'>
+                                    <h1 className='text-txt-sub'>No Pending Request found</h1>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </>
+            }
         </div>
     )
 }

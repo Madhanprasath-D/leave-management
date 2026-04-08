@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:5005/api",
+    baseURL: import.meta.env.VITE_API_URL,
     headers: {
         "Content-Type": "application/json",
     },
@@ -75,6 +75,15 @@ export const GetUsers = async (path:string) => {
 export const UpdateStatus = async (path:string, data: any) => {
   try {
     const res = await api.patch(path, data);
+    return res.data;
+  } catch (err: any) {
+    throw new Error(err.response?.data?.message || "Cancel failed");
+  }
+};
+
+export const GetMetadata = async (path:string) => {
+  try {
+    const res = await api.get(path);
     return res.data;
   } catch (err: any) {
     throw new Error(err.response?.data?.message || "Cancel failed");

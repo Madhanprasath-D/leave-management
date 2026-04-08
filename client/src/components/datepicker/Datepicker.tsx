@@ -2,7 +2,7 @@ import * as React from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const CustomDatePicker = ({ value, onChange }: any) => {
-    const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   return (
     <DatePicker
       value={value}
@@ -13,7 +13,7 @@ const CustomDatePicker = ({ value, onChange }: any) => {
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
-      
+
       slotProps={{
         textField: {
           onClick: () => setOpen(true),
@@ -22,6 +22,10 @@ const CustomDatePicker = ({ value, onChange }: any) => {
           InputProps: {
             className:
               " border p-2 bg-appbg-section border-white/20 text-txt-sub outline-none rounded-lg",
+
+            sx: {
+              color: "white",
+            }
           },
           sx: {
             "& .MuiInputBase-root": {
@@ -34,7 +38,7 @@ const CustomDatePicker = ({ value, onChange }: any) => {
               padding: "10px 12px",
             },
             "& .MuiSvgIcon-root": {
-              color: "#94A3B8", 
+              color: "#94A3B8",
             },
           },
         },

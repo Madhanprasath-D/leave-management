@@ -19,7 +19,6 @@ router.post("/auth/login", login);
 router.post("/auth/signup", signup);
 
 router.get("/users", authMiddleware, getUsers);
-router.get("/users/:id", authMiddleware, getUsers);
 
 router.get("/leaves", authMiddleware, getLeaves);
 router.get("/leaves/:id", authMiddleware, getLeaves);

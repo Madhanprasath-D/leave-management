@@ -142,7 +142,7 @@ const Apply: React.FC = () => {
                             <textarea
                                 value={reason}
                                 onChange={(e) => setReason(e.target.value)}
-                                name="reason" id="reason" className='w-full h-56 border p-2 bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+                                name="reason" id="reason" className='w-full h-56 border p-2 bg-appbg-section border-white/20 text-txt-main focus:outline-none 
   focus:ring-2 focus:ring-blue-500 rounded-lg 
   focus:border-transparent' cols={10}>
                             </textarea>

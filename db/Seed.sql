@@ -9,10 +9,6 @@ CREATE TABLE users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users (name, email, password, role)
-VALUES ('Admin', 'admin@gmail.com', 'admin@123', 'manager');
-
-
 
 CREATE TABLE leaves (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

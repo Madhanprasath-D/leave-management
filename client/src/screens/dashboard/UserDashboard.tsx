@@ -87,14 +87,18 @@ const UserDashboard: React.FC = () => {
             </div>
             <div className='w-full flex flex-col p-3 gap-4 rounded-lg border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl'>
                 <div className='flex items-center justify-between px-2'>
-                    <h1 className='text-txt-main'>Recent Leave Request</h1>
+                    <h1 className='text-txt-main'>Pending Leave Request</h1>
                     <h2 onClick={() => navigate('/history')} className='text-button-primary hover:text-button-primary/70 cursor-pointer'>View all</h2>
                 </div>
                 <div>
                     {loading ? <div className='w-full flex items-center justify-between'>
                         <LoaderCircle className=' animate-spin' color='white' />
                     </div> :
-                        <CustomTable data={leaveData} onUpdate={()=> {}} onCancel={(e) => handleCancel(e)} role={user?.role as string} />}
+                       leaveData.length > 0 ? <CustomTable data={leaveData} onUpdate={()=> {}} onCancel={(e) => handleCancel(e)} role={user?.role as string} />: 
+                       <div className='flex items-center justify-center w-full'>
+                            <h1 className='text-txt-sub'>No Pending Request found</h1>
+                       </div>
+                       }
                 </div>
             </div>
         </div>
