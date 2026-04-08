@@ -53,7 +53,7 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                 </thead>
 
                 <tbody className="">
-                    {
+                    {   props.data.length > 0 ?
                         props.data.map((ele) => (
                             <tr className=" transition bg-appbg-section border border-white/20">
                                 <td className="px-6 py-4 font-medium text-txt-sub flex gap-2 items-center">
@@ -140,8 +140,11 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                         </div>
                                     </PopUp>
                                 </td>
-                            </tr>
-                        ))
+                            </tr> 
+                        )) :
+                       <div className="p-3 w-full col-span-5">
+                            <h2 className="text-txt-sub">No data founded</h2>
+                       </div>
                     }
                 </tbody>
             </table>
