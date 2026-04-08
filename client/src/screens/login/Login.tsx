@@ -39,8 +39,12 @@ const Login: React.FC = () => {
         try {
             const res = await UserLogin(JSON.stringify({ email, password }))
             const data = res.data
+            const expiryTime = Date.now() + 6 * 60 * 60 * 1000; // 6 hours
             localStorage.setItem('token', data.token)
-            localStorage.setItem('user', JSON.stringify(data.user))
+            localStorage.setItem("auth", JSON.stringify({
+                user: data.user,
+                expiry: expiryTime
+            }));
             login(data.user)
             navigate('/dashboard')
         } catch (err: any) {

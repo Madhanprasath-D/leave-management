@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type Role = "employee" | "manager" | null;
 
@@ -27,6 +27,20 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     setUser(null);
   };
+
+  useEffect(() => {
+    const storedAuth = localStorage.getItem("auth");
+
+    if (storedAuth) {
+      const parsed = JSON.parse(storedAuth);
+
+      if (Date.now() < parsed.expiry) {
+        setUser(parsed.user);
+      } else {
+        localStorage.removeItem("auth"); // expired
+      }
+    }
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, login, logout }}>
