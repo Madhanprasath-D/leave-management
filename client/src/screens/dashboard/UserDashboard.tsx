@@ -1,13 +1,16 @@
-import { CalendarCheck2, ClipboardClock, TicketCheck } from 'lucide-react'
-import React from 'react'
+import { CalendarCheck2, ClipboardClock, LoaderCircle, TicketCheck } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CustomTable from '../../components/table/Table'
 import { useUser } from '../../contexts/auth/UserContext'
 import jsondata from '../../data/sample.json'
+import { GetLeaves } from '../../invoke/InvokeAPI'
 
 const UserDashboard: React.FC = () => {
     const navigate = useNavigate()
     const { user } = useUser()
+    const [leaveData, setLeaveData] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
     const leaveOverview = [
         {
             label: 'Total Leave Taken',
@@ -23,17 +26,32 @@ const UserDashboard: React.FC = () => {
         }
     ]
 
-    const userDetails = {
-        name: 'Madhanprasath',
-        email: 'madhanprasath786@gmail.com',
-        role: "ADMIN"
-    }
 
     const icon = [
         <CalendarCheck2 size={56} strokeWidth={2} color='#94A3B8' />,
         <ClipboardClock size={56} strokeWidth={2} color='#94A3B8' />,
         <TicketCheck size={56} strokeWidth={2} color='#94A3B8' />
     ]
+
+
+
+    useEffect(() => {
+        const fetchLeaves = async () => {
+            setLoading(true);
+            try {
+                const endpoint = `/leaves/${user?.id}?status=pending`
+                const data = await GetLeaves(endpoint);
+                console.log("Leaves:", data);
+                setLeaveData(data);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchLeaves();
+    }, []);
     return (
         <div className='p-3 flex flex-col gap-3 bg-light-bg'>
             <div className='px-2 flex items-center justify-between'>
@@ -66,7 +84,10 @@ const UserDashboard: React.FC = () => {
                     <h2 onClick={() => navigate('/history')} className='text-button-primary hover:text-button-primary/70 cursor-pointer'>View all</h2>
                 </div>
                 <div>
-                    <CustomTable data={jsondata['leave']} onCancel={() => { }} onApprove={() => { }} role={userDetails.role} />
+                    {loading ? <div className='w-full flex items-center justify-between'>
+                        <LoaderCircle className=' animate-spin' color='white'/>
+                        </div> :
+                        <CustomTable data={leaveData} onCancel={() => { }} onApprove={() => { }} role={user?.role as string} />}
                 </div>
             </div>
         </div>

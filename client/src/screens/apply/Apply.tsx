@@ -8,7 +8,7 @@ const Apply: React.FC = () => {
     const options = [
         { value: "casual", label: "Casual Leave" },
         { value: "sick", label: "Sick Leave" },
-        { value: "paid", label: "Paid Leave" },
+        { value: "others", label: "Others" },
     ];
 
     const customStyles = {

@@ -9,24 +9,39 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
-
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
 });
 
-export const UserLogin = async (path: string, data: any) => {
-    const response = await api.post(path, data);
-    return response
+export const UserLogin = async (data: any) => {
+    try {
+        const response = await api.post('/auth/login', data);
+        return response
+    } catch (err: any) {
+        throw new Error(err.response?.data?.message || "Failed to fetch leaves");
+    }
 }
 
-export const FetchLeaces = async (path: string) => {
-    const response = await api.get("/leaves");
-    return response.data;
+
+export const UserSignUp = async (data: any) => {
+    try {
+        const response = await api.post('/auth/signup', data);
+        return response
+    } catch (err: any) {
+        throw new Error(err.response?.data?.message || "Failed to fetch leaves");
+    }
 }
 
+export const GetLeaves = async (path: string) => {
+    try {
+        const res = await api.get(path);
+        return res.data;
+    } catch (err: any) {
+        throw new Error(err.response?.data?.message || "Failed to fetch leaves");
+    }
+};
 
 
 

@@ -6,22 +6,33 @@ import PopUp from "../popup/PopUp";
 
 interface TableDataInfo {
     id: string
-    leaveType: string
-    from: string
-    to: string
+    leave_type: string
+    start_date: string
+    end_date: string
     days: string
     reason: string
     status: string
     approvedby: string
+    user_name: string
+    user_email: string
+    manager_comment: string
 }
 interface componentsProps {
     data: TableDataInfo[]
     role: string
-    onApprove?: (e) => void
-    onCancel: (e) => void
+    onApprove?: (e: any) => void
+    onCancel: (e: any) => void
 }
 
 const CustomTable: React.FC<componentsProps> = (props) => {
+
+    const getDays = (from: string, to:string) => {
+        const start = new Date(from);
+        const end = new Date(to);
+
+        const diffInMs = end.getTime()  - start.getTime();
+        return Math.ceil(diffInMs / (1000 * 60 * 60 * 24)) + 1;
+    }
     return (
         <div className="shadow overflow-hidden rounded-lg">
             <table className="min-w-full text-sm text-left text-gray-700 ">
@@ -31,8 +42,8 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                         <th className="px-6 py-3">From</th>
                         <th className="px-6 py-3">To</th>
                         <th className="px-6 py-3">Days</th>
+                        <th className="px-6 py-3">Reason</th>
                         <th className="px-6 py-3">status</th>
-                        <th className="px-6 py-3">{props.role == 'ADMIN' ? 'Name' : 'approvedby'}</th>
                         <th className="px-6 py-3">Action</th>
                     </tr>
                 </thead>
@@ -43,15 +54,15 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                             <tr className=" transition bg-appbg-section border border-white/20">
                                 <td className="px-6 py-4 font-medium text-txt-sub flex gap-2 items-center">
                                     <div className="size-2 rounded-full bg-red-300" />
-                                    {ele.leaveType}
+                                    {ele.leave_type}
                                 </td>
-                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.from}</td>
-                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.to}</td>
-                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.days}</td>
+                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.start_date.split('T')[0]}</td>
+                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.end_date.split('T')[0]}</td>
+                                <td className="px-6 py-4 font-medium text-txt-sub">{getDays(ele.start_date, ele.end_date)}</td>
+                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.reason}</td>
                                 <td className="px-6 py-4">
                                     <Badge type={ele.status}>{ele.status}</Badge>
                                 </td>
-                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.approvedby}</td>
                                 <td className="px-6 py-4">
                                     <PopUp lable="view">
                                         <div className='flex flex-col gap-3 relative'>
@@ -69,61 +80,51 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                             <div className='bg-gray-400/30 border border-gray-400 p-3 px-4 flex flex-col gap-3 rounded-md '>
                                                 <div className='flex items-center justify-between'>
                                                     <h2 className=' uppercase text-sm font-medium text-txt-main'>Duration</h2>
-                                                    <h2 className='text-sm text-black'>{ele.days} Days</h2>
+                                                    <h2 className='text-sm text-black'>{getDays(ele.start_date, ele.end_date)} Days</h2>
                                                 </div>
                                                 <div className='flex items-center justify-between'>
                                                     <h2 className=' uppercase text-sm font-medium text-txt-main'>Dates</h2>
-                                                    <h2 className='text-sm text-black'>{ele.from} - {ele.to}</h2>
+                                                    <h2 className='text-sm text-black'>{ele.start_date.split('T')[0]} - {ele.end_date.split('T')[0]}</h2>
                                                 </div>
                                             </div>
                                             <div className='flex flex-col gap-2 rounded-md text-wrap'>
                                                 <h1 className='text-sm text-txt-main'>Reason</h1>
-                                                <textarea name="" id="" 
-                                                value={ele.reason}
-                                                disabled
-                                                className='text-sm w-full h-28 border p-2 bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+                                                <textarea name="" id=""
+                                                    value={ele.reason}
+                                                    disabled
+                                                    className='text-sm w-full h-28 border p-2 bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
                                                     focus:ring-2 focus:ring-blue-500 rounded-lg 
                                                     focus:border-transparent'></textarea>
                                             </div>
-                                            <div className='flex flex-col gap-2 rounded-md text-wrap'>
+                                            {ele.manager_comment  && <div className='flex flex-col gap-2 rounded-md text-wrap'>
                                                 <h1 className='text-sm text-txt-main'>Comment</h1>
-                                                <textarea name="" id="" 
-                                                disabled={ele.status.toLocaleLowerCase() != 'pending'}
-                                                className='w-full h-28 border p-2 bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+                                                <textarea name="" id=""
+                                                    disabled={ele.status.toLocaleLowerCase() != 'pending'}
+                                                    className='w-full h-28 border p-2 bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
                                                     focus:ring-2 focus:ring-blue-500 rounded-lg 
                                                     focus:border-transparent'></textarea>
-                                            </div>
+                                            </div>}
                                             <div className='justify-center flex gap-5'>
-                                                {props.role == 'ADMIN' ? <>
-                                                    <button 
-                                                    disabled={ele.status.toLocaleLowerCase() != 'pending'}
+                                                {props.role == 'manager' ? <>
+                                                    <button
+                                                        disabled={ele.status.toLocaleLowerCase() != 'pending'}
                                                         className='p-2 px-4 rounded-md bg-red-300 hover:bg-red-300/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'>
                                                         Reject
                                                     </button>
-                                                    <button 
-                                                    disabled={ele.status.toLocaleLowerCase() != 'pending'}
-                                                    className='p-2 px-4 rounded-md bg-green-300 hover:bg-green-300/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'>
+                                                    <button
+                                                        disabled={ele.status.toLocaleLowerCase() != 'pending'}
+                                                        className='p-2 px-4 rounded-md bg-green-300 hover:bg-green-300/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'>
                                                         Approve
                                                     </button>
                                                 </> :
-                                                    <button 
-                                                    disabled={ele.status.toLocaleLowerCase() != 'pending'}
-                                                    className={'p-2 px-4 rounded-md bg-red-300 hover:bg-red-300/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'}>
+                                                    <button
+                                                        disabled={ele.status.toLocaleLowerCase() != 'pending'}
+                                                        className={'p-2 px-4 rounded-md bg-red-300 hover:bg-red-300/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'}>
                                                         Revoke
                                                     </button>}
                                             </div>
                                         </div>
                                     </PopUp>
-                                    {/* {
-                                        props.role == 'ADMIN' ?
-                                            <div className="flex gap-2">
-                                                <CircleCheck size={20} strokeWidth={2} color="green" onClick={()=> props.onApprove(ele.id)} className=" cursor-pointer"/>
-                                                <CircleX size={20}  strokeWidth={2} color="red" onClick={()=> props.onCancel(ele.id)} className=" cursor-pointer"/>
-                                            </div> :
-                                            <button
-                                                onClick={() => props.onCancel(ele.id)}
-                                                className="text-red-400 hover:text-red-600 font-bold cursor-pointer" disabled={ele.status != 'Pending'}>Cancel</button>
-                                    } */}
                                 </td>
                             </tr>
                         ))

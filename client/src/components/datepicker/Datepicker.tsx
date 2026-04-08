@@ -1,7 +1,6 @@
 import * as React from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Calendar } from "lucide-react";
 
 const CustomDatePicker = () => {
   const [value, setValue] = React.useState<Dayjs | null>(dayjs());
@@ -23,7 +22,6 @@ const CustomDatePicker = () => {
           variant: "outlined",
           fullWidth: true,
           InputProps: {
-            disableUnderline: true, 
             className:
               " border p-2 bg-appbg-section border-white/20 text-txt-sub outline-none rounded-lg",
           },

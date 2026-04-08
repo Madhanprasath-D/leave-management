@@ -1,10 +1,22 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { LavelValue } from '../../utils/Types'
+import { UserSignUp } from '../../invoke/InvokeAPI'
+import { useUser } from '../../contexts/auth/UserContext'
+import { EyeClosed, LoaderCircle } from 'lucide-react'
 
 const Signup: React.FC = (props) => {
   const [showPassword, setShowpassword] = useState<boolean>(false)
+  const [showCPassword, setShowCpassword] = useState<boolean>(false)
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
+
+  const { login } = useUser();
 
   const menu: LavelValue[] = [
     {
@@ -16,6 +28,63 @@ const Signup: React.FC = (props) => {
       value: "sign-up"
     }
   ]
+
+
+  const validate = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!name) newErrors.name = "Name is required";
+
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Invalid email";
+    }
+
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Min 6 characters required";
+    }
+
+    if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+
+
+  const handleSignup = async () => {
+    if (!validate()) return;
+
+    setLoading(true);
+
+    try {
+      const res = await UserSignUp(JSON.stringify(
+        {
+          name,
+          email,
+          password
+        }
+      ));
+      const data = res.data
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      login(data.user);
+
+      navigate("/dashboard");
+
+    } catch (err: any) {
+      setErrors({ global: err.message });
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   return (
@@ -39,7 +108,8 @@ const Signup: React.FC = (props) => {
           <div >
             <h6 className='text-sm font-bold  mb-1 text-txt-sub'>Name</h6>
             <input
-            className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+              value={name} onChange={(e) => setName(e.target.value)}
+              className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
   focus:ring-2 focus:ring-blue-500 
   focus:border-transparent'
               type="text" placeholder='Enter your Name' />
@@ -48,7 +118,8 @@ const Signup: React.FC = (props) => {
           <div >
             <h6 className='text-sm font-bold text-txt-sub mb-1'>Email address</h6>
             <input
-            className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+              value={email} onChange={(e) => setEmail(e.target.value)}
+              className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
   focus:ring-2 focus:ring-blue-500 
   focus:border-transparent'
               type="text" placeholder='Enter your email address' />
@@ -57,13 +128,14 @@ const Signup: React.FC = (props) => {
             <h6 className='text-sm font-bold text-txt-sub mb-1'>Password</h6>
             <div className='flex items-center gap-3'>
               <input
-              className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+                value={password} onChange={(e) => setPassword(e.target.value)}
+                className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
   focus:ring-2 focus:ring-blue-500 
   focus:border-transparent'
                 type={!showPassword ? 'password' : 'text'} placeholder='Enter your password' />
-              <div className='size-4 bg-emerald-300'
-                onClick={() => setShowpassword(!showPassword)}
-              ></div>
+              
+              <EyeClosed color={'#94A3B8'} onClick={() => setShowpassword(!showPassword)} className=' cursor-pointer' />
+
             </div>
           </div>
 
@@ -71,19 +143,24 @@ const Signup: React.FC = (props) => {
             <h6 className='text-sm font-bold text-txt-sub mb-1'>Confirm password</h6>
             <div className='flex items-center gap-3'>
               <input
-              className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+                value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+                className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
   focus:ring-2 focus:ring-blue-500 
   focus:border-transparent'
-                type={!showPassword ? 'password' : 'text'} placeholder='Enter your password' />
-              <div className='size-4 bg-emerald-300'
-                onClick={() => setShowpassword(!showPassword)}
-              ></div>
+                type={!showCPassword ? 'password' : 'text'} placeholder='Enter your password' />
+              
+              <EyeClosed color={'#94A3B8'} onClick={() => setShowCpassword(!showCPassword)} className=' cursor-pointer' />
+              
             </div>
           </div>
 
           <div className='w-full'>
-            <button className='w-full bg-button-primary hover:bg-button/80 p-2 py-3 rounded-lg font-medium text-white'>
-              Sign up
+            <button
+              disabled={loading}
+              onClick={() => handleSignup()}
+              className='w-full bg-button-primary hover:bg-button-primary/80 p-2 py-3 rounded-lg font-medium text-white'>
+              {!loading ? 'Sign Up' :
+                <LoaderCircle className=' animate-spin' />}
             </button>
           </div>
         </div>

@@ -38,9 +38,16 @@ exports.signup = async (data) => {
     role: "employee",
   });
 
+  const token = generateToken({ id: user.id, role: user.role });
+
+
   return {
-    id: user.id,
-    name: user.name,
-    email: user.email
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      role: user.role,
+      email: user.email
+    },
   };
 };

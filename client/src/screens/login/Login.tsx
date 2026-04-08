@@ -54,7 +54,7 @@ const Login: React.FC = () => {
         setLoading(true);
 
         try {
-            const res = await UserLogin('/auth/login', JSON.stringify({ email, password }));
+            const res = await UserLogin( JSON.stringify({ email, password }));
 
             console.log("API response:", res);
 
@@ -71,10 +71,9 @@ const Login: React.FC = () => {
 
         } catch (err: any) {
             console.error("Login error:", err);
-
-            setErrors({ email: err.message }); // or global error state
+            setErrors({ email: err.message }); 
         } finally {
-            setLoading(false); // ✅ ALWAYS runs
+            setLoading(false); 
         }
     };
 

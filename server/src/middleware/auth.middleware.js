@@ -2,8 +2,8 @@ const { verifyToken } = require("../utils/jwt");
 
 exports.authMiddleware = (req, res, next) => {
   const access = {
-    "manager": ['/users/'],
-    "employee": ['/users/:id', '/leaves/apply']
+    "manager": ['/users/' , '/leaves', '/leaves/:id', '/meta'],
+    "employee": ['/users/:id', '/leaves/apply', '/leaves', '/leaves/:id', '/leaves/apply/:id', '/meta']
   }
   try {
     const authHeader = req.headers.authorization;

@@ -26,17 +26,26 @@ exports.checkOverlap = async (user_id, start_date, end_date) => {
 };
 
 exports.getLeaves = async (id, status) => {
-  let query = "SELECT * FROM leaves WHERE 1=1";
+  let query = `
+    SELECT 
+      l.*,
+      u.name AS user_name,
+      u.email AS user_email
+    FROM leaves l
+    JOIN users u ON l.user_id = u.id
+    WHERE 1=1
+  `;
+
   const params = [];
 
   if (id) {
     params.push(id);
-    query += ` AND user_id = $${params.length}`;
+    query += ` AND l.user_id = $${params.length}`;
   }
 
   if (status && status !== "all") {
     params.push(status.toUpperCase());
-    query += ` AND status = $${params.length}`;
+    query += ` AND l.status = $${params.length}`;
   }
 
   const result = await pool.query(query, params);
@@ -80,16 +89,3 @@ exports.getManagerMeta = async () => {
 
   return result.rows[0];
 };
-
-
-/*
-
-now i need create a apis 
-1. for auth login -> post call have user email and password in body -> i need to aurt the user and need to send the user info and jwt
-2. for auth sign up -> in post the user details like name, email, password in body assume the sign up use alway will be employee -> need to getthe data and encrept the password and store details it in db 
-3. for leave request /:id?status=pending or all  if the api have id and query based on the id andquery the leave details want to be return
-4. for user details -> /:id if id there the details for the spcific user or return all the user details
-5. for apply leave -> get the details like leave type, from, to, reason from request body and add it in db with pending status.
-6. for approve/reject -> get the detail like appeoves or not in bool, comment msg in body -> based on that change the status and comment msg in db
-7. for metadata -> for user [total number of leave, total pending request, total approved request] want to return // for manager [total leave request,total  pending, total approved] want to return
-*/

@@ -4,7 +4,7 @@ exports.getLeaves = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.query;
-
+  
     const data = await leaveService.getLeaves(id, status);
     res.json(data);
   } catch (err) {
