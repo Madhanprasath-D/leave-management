@@ -13,6 +13,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<Login />} />
         <Route path="/sign-up" element={<Signup />} />
