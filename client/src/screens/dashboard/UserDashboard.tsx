@@ -3,25 +3,30 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CustomTable from '../../components/table/Table'
 import { useUser } from '../../contexts/auth/UserContext'
-import { CancelLeave, GetLeaves } from '../../invoke/InvokeAPI'
+import { CancelLeave, GetLeaves, GetMetadata } from '../../invoke/InvokeAPI'
+import { SimpleSnackbar } from '../../components/toast/Toast'
 
 const UserDashboard: React.FC = () => {
     const navigate = useNavigate()
     const { user } = useUser()
     const [leaveData, setLeaveData] = useState<any[]>([]);
+    const [metadata, setMetadata] = useState<any>({});
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false)
+    const [msg, setMsg] = useState('')
+
     const leaveOverview = [
         {
             label: 'Total Leave Taken',
-            value: '20'
+            value: 'total'
         },
         {
             label: 'Pending Request',
-            value: '5'
+            value: 'pending'
         },
         {
             label: 'Approved Request',
-            value: '8'
+            value: 'approved'
         }
     ]
 
@@ -46,11 +51,23 @@ const UserDashboard: React.FC = () => {
             setLoading(false);
         }
     };
+
+    const fetchMetadata = async () => {
+        try {
+            const endpoint = `/meta`
+            const data = await GetMetadata(endpoint);
+            setMetadata(data);
+        } catch (err: any) {
+            setMsg(err.message)
+            setOpen(true)
+        }
+    }
     useEffect(() => {
+        fetchMetadata();
         fetchLeaves();
     }, []);
 
-    const handleCancel = async (id: string) => {        
+    const handleCancel = async (id: string) => {
         try {
             await CancelLeave(`/leaves/${id}/cancel`);
             fetchLeaves();
@@ -61,6 +78,12 @@ const UserDashboard: React.FC = () => {
 
     return (
         <div className='p-3 flex flex-col gap-3 bg-light-bg'>
+            <SimpleSnackbar
+                open={open}
+                color={'danger'}
+                msg={msg}
+                onClose={() => setOpen(false)}
+            />
             <div className='px-2 flex items-center justify-between'>
                 <div>
                     <h1 className='text-main-text text-2xl'>Welcome back! <span className='text-txt-link'>{user?.name}</span></h1>
@@ -72,35 +95,40 @@ const UserDashboard: React.FC = () => {
                     Apply Leave
                 </button>}
             </div>
-            <div className='w-full  h-max flex flex-col lg:flex-row gap-3 flex-wrap'>
-                {
-                    leaveOverview.map((ele, index) => (
-                        <div className={'flex  md:flex-1 relative flex-col p-2 rounded-lg gap-2 px-5 justify-between border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl'} key={index}>
-                            <div className='flex gap-3 items-center'>
-                                <div className={'p-3 rounded-md absolute right-0 top-3 rotate-12 opacity-20'}>{icon[index]}</div>
-                                <h1 className='text-lg font-medium text-main-text'>{ele.label}</h1>
-                            </div>
-                            <h1 className='text-2xl text-main-text'>{ele.value}</h1>
+            {loading ? <div className='w-full flex items-center justify-between'>
+                <LoaderCircle className=' animate-spin' color='white' />
+            </div> :
+                <>
+                    <div className='w-full  h-max flex flex-col lg:flex-row gap-3 flex-wrap'>
+                        {
+                            leaveOverview.map((ele, index) => (
+                                <div className={'flex  md:flex-1 relative flex-col p-2 rounded-lg gap-2 px-5 justify-between border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl'} key={index}>
+                                    <div className='flex gap-3 items-center'>
+                                        <div className={'p-3 rounded-md absolute right-0 top-3 rotate-12 opacity-20'}>{icon[index]}</div>
+                                        <h1 className='text-lg font-medium text-main-text'>{ele.label}</h1>
+                                    </div>
+                                    <h1 className='text-2xl text-main-text'>{metadata[ele.value]}</h1>
+                                </div>
+                            ))
+                        }
+                    </div>
+                    <div className='w-full flex flex-col p-3 gap-4 rounded-lg border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl'>
+                        <div className='flex items-center justify-between px-2'>
+                            <h1 className='text-txt-main'>Pending Leave Request</h1>
+                            <h2 onClick={() => navigate('/history')} className='text-button-primary hover:text-button-primary/70 cursor-pointer'>View all</h2>
                         </div>
-                    ))
-                }
-            </div>
-            <div className='w-full flex flex-col p-3 gap-4 rounded-lg border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl'>
-                <div className='flex items-center justify-between px-2'>
-                    <h1 className='text-txt-main'>Pending Leave Request</h1>
-                    <h2 onClick={() => navigate('/history')} className='text-button-primary hover:text-button-primary/70 cursor-pointer'>View all</h2>
-                </div>
-                <div>
-                    {loading ? <div className='w-full flex items-center justify-between'>
-                        <LoaderCircle className=' animate-spin' color='white' />
-                    </div> :
-                       leaveData.length > 0 ? <CustomTable data={leaveData} onUpdate={()=> {}} onCancel={(e) => handleCancel(e)} role={user?.role as string} />: 
-                       <div className='flex items-center justify-center w-full'>
-                            <h1 className='text-txt-sub'>No Pending Request found</h1>
-                       </div>
-                       }
-                </div>
-            </div>
+                        <div>
+                            {loading ? <div className='w-full flex items-center justify-between'>
+                                <LoaderCircle className=' animate-spin' color='white' />
+                            </div> :
+                                leaveData.length > 0 ? <CustomTable data={leaveData} onUpdate={() => { }} onCancel={(e) => handleCancel(e)} role={user?.role as string} /> :
+                                    <div className='flex items-center justify-center w-full'>
+                                        <h1 className='text-txt-sub'>No Pending Request found</h1>
+                                    </div>
+                            }
+                        </div>
+                    </div>
+                </>}
         </div>
     )
 }
