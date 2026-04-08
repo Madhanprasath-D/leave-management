@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Badge from "../badge/Badge";
-import { CircleCheck, CircleX, LoaderCircle, Stamp } from "lucide-react";
+import { LoaderCircle, Stamp } from "lucide-react";
 import PopUp from "../popup/PopUp";
 
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import MembersCard from '../../components/card/MembersCard'
 import { GetUsers } from '../../invoke/InvokeAPI'
+import { LoaderCircle } from 'lucide-react';
 const Members: React.FC = () => {
 
     const [members, setMembers] = useState<any[]>([]);
@@ -26,13 +27,13 @@ const Members: React.FC = () => {
 
     return (
         <div className='p-3 flex flex-col gap-3 bg-light-bg'>
-            <div className='w-full  h-max grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
+            {loading ? <LoaderCircle className=' animate-spin' color='white' /> :<div className='w-full  h-max grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
                 {
                     members.map((ele, index) => (
                         <MembersCard data={ele} key={index}/>
                     ))
                 }
-            </div>
+            </div>}
 
         </div>
     )

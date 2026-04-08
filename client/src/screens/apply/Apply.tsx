@@ -4,6 +4,7 @@ import CustomDatePicker from '../../components/datepicker/Datepicker'
 import { useNavigate } from 'react-router-dom'
 import { ApplyLeave } from '../../invoke/InvokeAPI'
 import { LoaderCircle } from 'lucide-react'
+import { SimpleSnackbar } from '../../components/toast/Toast'
 
 const Apply: React.FC = () => {
     const navigate = useNavigate()
@@ -14,6 +15,7 @@ const Apply: React.FC = () => {
     const [reason, setReason] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [open, setOpen] = useState(false)
 
     const options = [
         { value: "casual", label: "Casual Leave" },
@@ -105,6 +107,12 @@ const Apply: React.FC = () => {
 
     return (
         <div className='p-4'>
+            <SimpleSnackbar
+                open={open}
+                color={'danger'}
+                msg={error}
+                onClose={() => setOpen(false)}
+            />
             <div className='w-full h-full flex flex-col  border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl p-3 rounded-lg gap-3'>
                 <div className='flex items-center justify-between shadow-sm pb-3'>
                     <h1 className='text-xl text-txt-main'>New Leave Request</h1>

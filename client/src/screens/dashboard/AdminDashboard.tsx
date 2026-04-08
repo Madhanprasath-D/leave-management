@@ -117,7 +117,7 @@ const AdminDashboard = () => {
                             <h1 className='text-txt-main'>New Leave Request</h1>
                         </div>
                         <div>
-                            {leaveData.length > 0 ? <CustomTable data={leaveData} onCancel={(e) => { }} onUpdate={(id, isApproved, msg) => handleChange(id, isApproved, msg)} role={user?.role as string} /> :
+                            {leaveData.length > 0 ? <CustomTable data={leaveData} onCancel={() => { }} onUpdate={(id, isApproved, msg) => handleChange(id, isApproved, msg)} role={user?.role as string} /> :
                                 <div className='flex items-center justify-center w-full'>
                                     <h1 className='text-txt-sub'>No Pending Request found</h1>
                                 </div>
