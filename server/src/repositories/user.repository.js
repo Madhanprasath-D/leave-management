@@ -25,7 +25,30 @@ exports.findByEmail = async (email) => {
 // Get all users
 exports.getAll = async () => {
   const result = await pool.query(
-    `SELECT id, name, email, role, created_at FROM users WHERE role = 'employee' ORDER BY id DESC`
+    `
+    SELECT 
+      u.id,
+      u.name,
+      u.email,
+      u.role,
+      u.created_at,
+
+      -- availability flag
+      CASE 
+        WHEN EXISTS (
+          SELECT 1 FROM leaves l
+          WHERE l.user_id = u.id
+          AND l.status = 'APPROVED'
+          AND CURRENT_DATE BETWEEN l.start_date AND l.end_date
+        )
+        THEN false
+        ELSE true
+      END AS is_available
+
+    FROM users u
+    WHERE u.role = 'employee'
+    ORDER BY u.created_at DESC
+    `
   );
 
   return result.rows;

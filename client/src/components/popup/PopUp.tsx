@@ -15,7 +15,6 @@ const PopUp: React.FC<PopUpProps> = (props) => {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 500,
         bgcolor: '#1F263B',
         border: '1px solid #545E71',
         boxShadow: 24,

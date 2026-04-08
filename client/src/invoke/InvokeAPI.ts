@@ -43,5 +43,32 @@ export const GetLeaves = async (path: string) => {
     }
 };
 
+export const ApplyLeave = async (data: any) => {
+  try {
+    const res = await api.post('/leaves/apply', data);
+    return res.data;
+  } catch (err: any) {
+    throw new Error(err.response?.data?.message || "Apply failed");
+  }
+};
 
+
+export const CancelLeave = async (path:string) => {
+  try {
+    const res = await api.delete(path);
+    return res.data;
+  } catch (err: any) {
+    throw new Error(err.response?.data?.message || "Cancel failed");
+  }
+};
+
+
+export const GetUsers = async (path:string) => {
+  try {
+    const res = await api.get(path);
+    return res.data;
+  } catch (err: any) {
+    throw new Error(err.response?.data?.message || "Cancel failed");
+  }
+};
 

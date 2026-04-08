@@ -89,3 +89,24 @@ exports.getManagerMeta = async () => {
 
   return result.rows[0];
 };
+
+
+exports.getLeaveById = async (id) => {
+  const result = await pool.query(
+    `SELECT * FROM leaves WHERE id = $1`,
+    [id]
+  );
+
+  return result.rows[0];
+};
+
+exports.deleteLeave = async (id) => {
+  const result = await pool.query(
+    `DELETE FROM leaves
+     WHERE id = $1
+     RETURNING *`,
+    [id]
+  );
+
+  return result.rows[0];
+};

@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import type { NavMenuItem } from '../../utils/Types'
 import { BadgePlus, Box, ClipboardClock, LogOut, Menu, Users } from 'lucide-react'
 import { Outlet, useNavigate } from 'react-router-dom'
@@ -45,10 +45,10 @@ const Layout: React.FC = () => {
     return (
         <div className='w-screen h-screen bg-background flex'>
             <div
-                className={`${open ? "w-64" : "w-16"
-                    } h-full  transition-all duration-500 ease-in-out border-r border-white/20`}
+                className={`${open ? "w-64 absolute z-10 md:static" : "w-16 absolute z-10 md:static"
+                    } h-full  transition-all duration-500 ease-in-out border-r bg-background border-white/20`}
             >
-                <div className='flex items-center justify-between p-2'>
+                <div className={`flex items-center p-2 ${ open ? 'justify-between' : 'justify-center'}`}>
                     {open ? <h4 className='pl-5 text-main-text'><span className='text-xl font-bold'>S</span>anyark</h4> : ''}
                     <button
                         onClick={() => setOpen(!open)}
@@ -71,7 +71,7 @@ const Layout: React.FC = () => {
                 </div>
 
             </div>
-            <div id="content" className='w-full h-full overflow-hidden bg-transparent'>
+            <div id="content" className='w-full h-full overflow-hidden bg-transparent ml-16 md:ml-0'>
                 <div className='w-full h-16 border-b border-white/20 shadow-white p-2 flex justify-between items-center'>
                     <div className='p-2'>
                         <h1 className='pl-3 text-lg font-bold text-white'>{location.pathname.split('/')[1][0].toUpperCase() + location.pathname.split('/')[1].slice(1)}</h1>
@@ -85,7 +85,7 @@ const Layout: React.FC = () => {
                         </div>
                         <div className='w-0.5 min-h-9 rounded-xl bg-gray-400' />
                         <div className='flex items-center gap-4'>
-                            <div className='flex flex-col items-end'>
+                            <div className='md:flex flex-col items-end hidden'>
                                 <h1 className='text-sm font-bold text-main-text'>{user?.name}</h1>
                                 <h5 className='text-sm text-gray-500'>{user?.email}</h5>
                             </div>

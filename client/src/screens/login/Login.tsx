@@ -79,7 +79,7 @@ const Login: React.FC = () => {
 
     return (
         <div className='w-full h-full flex items-center justify-center '>
-            <div className='w-2/3 flex flex-col items-center justify-center gap-5 border border-white/[0.09] bg-appbg-section rounded-lg p-4 backdrop-blur-sm shadow-xl'>
+            <div className='w-full md:w-1/3 flex flex-col items-center justify-center gap-5 border border-white/[0.09] bg-appbg-section rounded-lg p-4 backdrop-blur-sm shadow-xl'>
                 <div className='flex gap-2 items-center justify-center'>
                     {menu.map((ele) => (
                         <div
@@ -129,7 +129,7 @@ const Login: React.FC = () => {
                         <button
                             disabled={loading}
                             onClick={() => handleLogin()}
-                            className='w-full bg-button-primary hover:bg-button-primary/80 p-2 py-3 rounded-lg font-medium text-white'>
+                            className='w-full bg-button-primary hover:bg-button-primary/80 p-2 py-3 rounded-lg font-medium text-white flex items-center justify-center'>
                             {!loading ? 'Log In' :
                                 <LoaderCircle className=' animate-spin' />}
                         </button>

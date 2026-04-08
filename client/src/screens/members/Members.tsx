@@ -1,27 +1,41 @@
 import { CalendarCheck2, ClipboardClock, TicketCheck } from 'lucide-react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import jsondata from '../../data/sample.json'
 import MembersCard from '../../components/card/MembersCard'
+import { GetUsers } from '../../invoke/InvokeAPI'
 const Members: React.FC = (props) => {
 
-    const members = jsondata['members']
+    const [members, setMembers] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        const fetchUsers = async () => {
+            setLoading(true);
+            try {
+                const data = await GetUsers('/users');
+                console.log("Users:", data);
 
-    const icon = [
-        <CalendarCheck2 size={56} strokeWidth={2} color='#94A3B8' />,
-        <ClipboardClock size={56} strokeWidth={2} color='#94A3B8' />,
-        <TicketCheck size={56} strokeWidth={2} color='#94A3B8' />
-    ]
+                setMembers(data);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
     return (
         <div className='p-3 flex flex-col gap-3 bg-light-bg'>
-            <div className='w-full  h-max grid grid-cols-3 gap-3 flex-wrap'>
+            <div className='w-full  h-max grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
                 {
                     members.map((ele, index) => (
-                        <MembersCard data={ele}/>
+                        <MembersCard data={ele} key={index}/>
                     ))
                 }
             </div>
-           
+
         </div>
     )
 }

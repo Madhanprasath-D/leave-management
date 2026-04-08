@@ -89,7 +89,7 @@ const Signup: React.FC = (props) => {
 
   return (
     <div className='w-full h-full flex items-center justify-center'>
-      <div className='w-2/3 flex flex-col items-center justify-center gap-5  border border-white/[0.09] bg-appbg-section rounded-lg p-4 backdrop-blur-sm shadow-xl'>
+      <div className='w-full md:w-1/3 flex flex-col items-center justify-center gap-5  border border-white/[0.09] bg-appbg-section rounded-lg p-4 backdrop-blur-sm shadow-xl'>
         <div className='flex gap-2 items-center justify-center'>
           {menu.map((ele) => (
             <div

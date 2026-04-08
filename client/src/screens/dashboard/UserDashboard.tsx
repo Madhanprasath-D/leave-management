@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import CustomTable from '../../components/table/Table'
 import { useUser } from '../../contexts/auth/UserContext'
 import jsondata from '../../data/sample.json'
-import { GetLeaves } from '../../invoke/InvokeAPI'
+import { CancelLeave, GetLeaves } from '../../invoke/InvokeAPI'
 
 const UserDashboard: React.FC = () => {
     const navigate = useNavigate()
@@ -35,23 +35,31 @@ const UserDashboard: React.FC = () => {
 
 
 
+    const fetchLeaves = async () => {
+        setLoading(true);
+        try {
+            const endpoint = `/leaves/${user?.id}?status=pending`
+            const data = await GetLeaves(endpoint);
+            setLeaveData(data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchLeaves = async () => {
-            setLoading(true);
-            try {
-                const endpoint = `/leaves/${user?.id}?status=pending`
-                const data = await GetLeaves(endpoint);
-                console.log("Leaves:", data);
-                setLeaveData(data);
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchLeaves();
     }, []);
+
+    const handleCancel = async (id: string) => {        
+        try {
+            await CancelLeave(`/leaves/${id}/cancel`);
+            fetchLeaves();
+        } catch (err: any) {
+            console.error(err.message);
+        }
+    };
+
     return (
         <div className='p-3 flex flex-col gap-3 bg-light-bg'>
             <div className='px-2 flex items-center justify-between'>
@@ -85,9 +93,9 @@ const UserDashboard: React.FC = () => {
                 </div>
                 <div>
                     {loading ? <div className='w-full flex items-center justify-between'>
-                        <LoaderCircle className=' animate-spin' color='white'/>
-                        </div> :
-                        <CustomTable data={leaveData} onCancel={() => { }} onApprove={() => { }} role={user?.role as string} />}
+                        <LoaderCircle className=' animate-spin' color='white' />
+                    </div> :
+                        <CustomTable data={leaveData} onCancel={(e) => handleCancel(e)} role={user?.role as string} />}
                 </div>
             </div>
         </div>

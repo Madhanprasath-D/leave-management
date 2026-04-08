@@ -1,16 +1,14 @@
 import * as React from "react";
-import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-const CustomDatePicker = () => {
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs());
+const CustomDatePicker = ({ value, onChange }: any) => {
     const [open, setOpen] = React.useState(false);
   return (
     <DatePicker
       value={value}
 
       className="bg-appbg-section rounded-md p-3"
-      onChange={(newValue) => setValue(newValue)}
+      onChange={(newValue) => onChange(newValue)}
 
       open={open}
       onOpen={() => setOpen(true)}

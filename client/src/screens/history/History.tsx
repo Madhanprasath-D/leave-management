@@ -16,7 +16,12 @@ const History: React.FC = () => {
         const fetchLeaves = async () => {
             setLoading(true);
             try {
-                const endpoint = `/leaves/${user?.id}`
+                var endpoint:string
+                if(user?.role == 'employee') {
+                    endpoint = `/leaves/${user?.id}`
+                } else {
+                    endpoint = `/leaves`
+                }
                 const data = await GetLeaves(endpoint);
                 console.log("Leaves:", data);
                 setLeaveData(data);

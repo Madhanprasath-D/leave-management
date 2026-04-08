@@ -39,3 +39,17 @@ exports.updateLeave = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+
+exports.cancelLeave = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const result = await leaveService.cancelLeave(id, userId);
+
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};

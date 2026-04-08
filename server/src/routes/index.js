@@ -8,6 +8,7 @@ const {
   getLeaves,
   applyLeave,
   updateLeave,
+  cancelLeave
 } = require("../controllers/leave.controller");
 const { getMeta } = require("../controllers/meta.controller");
 
@@ -25,6 +26,7 @@ router.get("/leaves/:id", authMiddleware, getLeaves);
 
 router.post("/leaves/apply", authMiddleware, applyLeave);
 router.patch("/leaves/apply/:id", authMiddleware, updateLeave);
+router.delete("/leaves/:id/cancel", authMiddleware, cancelLeave);
 
 router.get("/meta", authMiddleware, getMeta);
 

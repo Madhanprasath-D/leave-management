@@ -31,3 +31,22 @@ exports.updateLeaveStatus = async (leaveId, approve, comment, managerId) => {
 
   return await leaveRepo.updateStatus(leaveId, status, comment, managerId);
 };
+
+
+exports.cancelLeave = async (leaveId, userId) => {
+  const leave = await leaveRepo.getLeaveById(leaveId);
+
+  if (!leave) {
+    throw new Error("Leave not found");
+  }
+
+  if (leave.user_id !== userId) {
+    throw new Error("Unauthorized");
+  }
+
+  if (leave.status !== "PENDING") {
+    throw new Error("Only pending leaves can be cancelled");
+  }
+
+  return await leaveRepo.deleteLeave(leaveId);
+};

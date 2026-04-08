@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import Badge from "../badge/Badge";
-import { CircleCheck, CircleX, Stamp } from "lucide-react";
+import { CircleCheck, CircleX, LoaderCircle, Stamp } from "lucide-react";
 import PopUp from "../popup/PopUp";
 
 
@@ -25,7 +25,7 @@ interface componentsProps {
 }
 
 const CustomTable: React.FC<componentsProps> = (props) => {
-
+    const [loading, setLoading] = useState(false)
     const getDays = (from: string, to:string) => {
         const start = new Date(from);
         const end = new Date(to);
@@ -34,11 +34,12 @@ const CustomTable: React.FC<componentsProps> = (props) => {
         return Math.ceil(diffInMs / (1000 * 60 * 60 * 24)) + 1;
     }
     return (
-        <div className="shadow overflow-hidden rounded-lg">
-            <table className="min-w-full text-sm text-left text-gray-700 ">
+        <div className="shadow box-border overflow-x-auto rounded-lg">
+            <table className=" md:table-fixed min-w-full md:w-full text-sm text-left text-gray-700 ">
                 <thead className=" text-xs text-txt-main uppercase m-2 bg-appbg-section border border-white/20">
                     <tr>
                         <th className="px-6 py-3">Leave type</th>
+                        {props.role == 'manager' && <th className="px-6 py-3">Name</th>}
                         <th className="px-6 py-3">From</th>
                         <th className="px-6 py-3">To</th>
                         <th className="px-6 py-3">Days</th>
@@ -56,16 +57,17 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                     <div className="size-2 rounded-full bg-red-300" />
                                     {ele.leave_type}
                                 </td>
+                                {props.role == 'manager' && <td className="px-6 py-4 font-medium text-txt-sub">{ele.user_name}</td>}
                                 <td className="px-6 py-4 font-medium text-txt-sub">{ele.start_date.split('T')[0]}</td>
                                 <td className="px-6 py-4 font-medium text-txt-sub">{ele.end_date.split('T')[0]}</td>
                                 <td className="px-6 py-4 font-medium text-txt-sub">{getDays(ele.start_date, ele.end_date)}</td>
-                                <td className="px-6 py-4 font-medium text-txt-sub">{ele.reason}</td>
+                                <td className="px-6 py-4 font-medium text-txt-sub  truncate ">{ele.reason}</td>
                                 <td className="px-6 py-4">
                                     <Badge type={ele.status}>{ele.status}</Badge>
                                 </td>
                                 <td className="px-6 py-4">
                                     <PopUp lable="view">
-                                        <div className='flex flex-col gap-3 relative'>
+                                        <div className='flex flex-col gap-3 md:w-96 w-64'>
                                             <div className='border-b border-white/20 pb-4'>
                                                 <div className='flex gap-3 items-center'>
                                                     <div className='p-3 bg-blue-300 rounded-md'>
@@ -73,7 +75,7 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                                     </div>
                                                     <div>
                                                         <h1 className='font-bold text-txt-main'>Review leave request</h1>
-                                                        <h3 className='text-sm text-txt-sub '>Employee: <span>{ele.approvedby}</span></h3>
+                                                        <h3 className='text-sm text-txt-sub '>Employee: <span>{ele.user_name}</span></h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -96,7 +98,7 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                                     focus:ring-2 focus:ring-blue-500 rounded-lg 
                                                     focus:border-transparent'></textarea>
                                             </div>
-                                            {ele.manager_comment  && <div className='flex flex-col gap-2 rounded-md text-wrap'>
+                                            {ele.manager_comment || props.role == 'manager'  && <div className='flex flex-col gap-2 rounded-md text-wrap'>
                                                 <h1 className='text-sm text-txt-main'>Comment</h1>
                                                 <textarea name="" id=""
                                                     disabled={ele.status.toLocaleLowerCase() != 'pending'}
@@ -107,20 +109,25 @@ const CustomTable: React.FC<componentsProps> = (props) => {
                                             <div className='justify-center flex gap-5'>
                                                 {props.role == 'manager' ? <>
                                                     <button
-                                                        disabled={ele.status.toLocaleLowerCase() != 'pending'}
+                                                        disabled={ele.status.toLowerCase() != 'pending'}
                                                         className='p-2 px-4 rounded-md bg-red-300 hover:bg-red-300/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'>
                                                         Reject
                                                     </button>
                                                     <button
-                                                        disabled={ele.status.toLocaleLowerCase() != 'pending'}
-                                                        className='p-2 px-4 rounded-md bg-green-300 hover:bg-green-300/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'>
+                                                        disabled={ele.status.toLowerCase() != 'pending'}
+                                                        className='p-2 px-4 rounded-md bg-button-primary hover:bg-button-primary/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'>
                                                         Approve
                                                     </button>
                                                 </> :
                                                     <button
-                                                        disabled={ele.status.toLocaleLowerCase() != 'pending'}
+                                                        disabled={ele.status.toLowerCase() != 'pending'}
+                                                        onClick={()=> {
+                                                            setLoading(true)                                        
+                                                            props.onCancel(ele.id)
+                                                            setLoading(false)
+                                                        }}
                                                         className={'p-2 px-4 rounded-md bg-red-300 hover:bg-red-300/80 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400'}>
-                                                        Revoke
+                                                        {loading ? <LoaderCircle className=' animate-spin' color='white' /> :'Revoke'}
                                                     </button>}
                                             </div>
                                         </div>
