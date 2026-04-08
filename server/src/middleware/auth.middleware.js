@@ -1,6 +1,10 @@
 const { verifyToken } = require("../utils/jwt");
 
 exports.authMiddleware = (req, res, next) => {
+  const access = {
+    "manager": ['/users/'],
+    "employee": ['/users/:id', '/leaves/apply']
+  }
   try {
     const authHeader = req.headers.authorization;
 
@@ -18,9 +22,13 @@ exports.authMiddleware = (req, res, next) => {
     // Verify token
     const decoded = verifyToken(token);
 
-    // Attach user info to request
-    req.user = decoded;
+    console.log("--- decode", decoded, req.route.path);
+    if (!access[decoded.role].includes(req.route.path)){
+       throw new Error("Unauthorized");
+    }
 
+    req.user = decoded;
+    
     next();
   } catch (err) {
     return res.status(401).json({ message: "Unauthorized" });

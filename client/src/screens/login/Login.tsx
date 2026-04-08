@@ -2,13 +2,40 @@ import React, { useState } from 'react'
 import type { LavelValue } from '../../utils/Types'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../../contexts/auth/UserContext'
-import { EyeClosed } from 'lucide-react'
+import { EyeClosed, LoaderCircle } from 'lucide-react'
+import { UserLogin } from '../../invoke/InvokeAPI'
 
 const Login: React.FC = () => {
     const navigate = useNavigate()
     const { login } = useUser();
 
     const [showPassword, setShowpassword] = useState<boolean>(false)
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+    const [loading, setLoading] = useState(false);
+
+
+    const validate = () => {
+        const newErrors: { email?: string; password?: string } = {};
+
+        if (!email) {
+            newErrors.email = "Email is required";
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            newErrors.email = "Invalid email format";
+        }
+
+        if (!password) {
+            newErrors.password = "Password is required";
+        } else if (password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+
     const menu: LavelValue[] = [
         {
             label: "Login",
@@ -20,20 +47,34 @@ const Login: React.FC = () => {
         }
     ]
 
-    const handleLogin = (role: "employee" | "manager") => {
-        const mockUser = {
-            id: 1,
-            name: "Madhan",
-            role,
-            email: ''
-        };
 
-        login(mockUser);
+    const handleLogin = async () => {
+        if (!validate()) return;
 
-        if (role === "employee") {
-            navigate("/employee");
-        } else {
-            navigate("/manager");
+        setLoading(true);
+
+        try {
+            const res = await UserLogin('/auth/login', JSON.stringify({ email, password }));
+
+            console.log("API response:", res);
+
+            const data = await res.data;
+
+            console.log("Parsed data:", data);
+
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            login(data.user);
+
+            navigate("/dashboard");
+
+        } catch (err: any) {
+            console.error("Login error:", err);
+
+            setErrors({ email: err.message }); // or global error state
+        } finally {
+            setLoading(false); // ✅ ALWAYS runs
         }
     };
 
@@ -58,9 +99,11 @@ const Login: React.FC = () => {
                     <div >
                         <h6 className='text-sm font-bold  mb-1 text-txt-sub'>Email address</h6>
                         <input
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
-  focus:ring-2 focus:ring-blue-500 
-  focus:border-transparent'
+    focus:ring-2 focus:ring-blue-500 
+    focus:border-transparent'
                             type="text" placeholder='Enter your email address' />
                     </div>
                     <div >
@@ -73,17 +116,23 @@ const Login: React.FC = () => {
                         </div>
                         <div className='flex items-center gap-3'>
                             <input
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
-  focus:ring-2 focus:ring-blue-500 
-  focus:border-transparent'
+    focus:ring-2 focus:ring-blue-500 
+    focus:border-transparent'
                                 type={!showPassword ? 'password' : 'text'} placeholder='Enter your password' />
-                            <EyeClosed color={'#94A3B8'} onClick={() => setShowpassword(!showPassword)} className=' cursor-pointer'/>
-                           
+                            <EyeClosed color={'#94A3B8'} onClick={() => setShowpassword(!showPassword)} className=' cursor-pointer' />
+
                         </div>
                     </div>
                     <div className='w-full'>
-                        <button className='w-full bg-button-primary hover:bg-button/80 p-2 py-3 rounded-lg font-medium text-white'>
-                            Log In
+                        <button
+                            disabled={loading}
+                            onClick={() => handleLogin()}
+                            className='w-full bg-button-primary hover:bg-button-primary/80 p-2 py-3 rounded-lg font-medium text-white'>
+                            {!loading ? 'Log In' :
+                                <LoaderCircle className=' animate-spin' />}
                         </button>
                     </div>
                 </div>

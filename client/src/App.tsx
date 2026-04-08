@@ -7,7 +7,7 @@ import Dashboard from './screens/dashboard/Dashboard'
 import Apply from './screens/apply/Apply'
 import History from './screens/history/History'
 import Members from './screens/members/Members'
-import Request from './screens/request/Request'
+import ProtectedRoute from './contexts/route/ProtectedRoute'
 
 function App() {
 
@@ -17,11 +17,12 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='sign-up' element={<Signup/>}/>
       </Route>
-      <Route path='/' element={<Layout/>}>
+      <Route path='/' element={
+        <ProtectedRoute><Layout/></ProtectedRoute>
+      }>
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/apply' element={<Apply/>}/>
         <Route path='/history' element={<History/>}/>
-        <Route path='/request' element={<Request/>}/>
         <Route path='/members' element={<Members/>}/>
       </Route>
     </Routes>

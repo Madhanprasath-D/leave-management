@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 type Role = "employee" | "manager" | null;
 
 interface User {
-  id: number;
+  id: string;
   name: string;
   email: string
   role: Role;

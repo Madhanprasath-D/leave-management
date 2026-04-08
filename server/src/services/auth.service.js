@@ -1,10 +1,11 @@
 const userRepo = require("../repositories/user.repository");
 const bcrypt = require("bcryptjs");
 const { generateToken } = require("../utils/jwt");
+const crypto = require('crypto');
+
 
 exports.login = async (email, password) => {
   const user = await userRepo.findByEmail(email);
-
   if (!user) throw new Error("User not found");
 
   const isMatch = await bcrypt.compare(password, user.password);
@@ -18,13 +19,13 @@ exports.login = async (email, password) => {
       id: user.id,
       name: user.name,
       role: user.role,
+      email: user.email
     },
   };
 };
 
 exports.signup = async (data) => {
   const { name, email, password } = data;
-
   const existing = await userRepo.findByEmail(email);
   if (existing) throw new Error("User already exists");
 
@@ -40,6 +41,6 @@ exports.signup = async (data) => {
   return {
     id: user.id,
     name: user.name,
-    email: user.email,
+    email: user.email
   };
 };

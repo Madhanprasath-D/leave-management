@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react'
-import CustomTable from '../../components/table/Table'
 import { CalendarCheck2, ClipboardClock, TicketCheck } from 'lucide-react'
-import jsondata from '../../data/sample.json'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
-const Request:React.FC = () => {
+import CustomTable from '../../components/table/Table'
+import { useUser } from '../../contexts/auth/UserContext'
+import jsondata from '../../data/sample.json'
+
+const UserDashboard: React.FC = () => {
     const navigate = useNavigate()
-  const leaveOverview = [
+    const { user } = useUser()
+    const leaveOverview = [
         {
-            label: 'Total leave Request',
+            label: 'Total Leave Taken',
             value: '20'
         },
         {
@@ -26,10 +29,6 @@ const Request:React.FC = () => {
         role: "ADMIN"
     }
 
-    if(userDetails.role != 'ADMIN') {
-        return <></>
-    }
-
     const icon = [
         <CalendarCheck2 size={56} strokeWidth={2} color='#94A3B8' />,
         <ClipboardClock size={56} strokeWidth={2} color='#94A3B8' />,
@@ -39,12 +38,14 @@ const Request:React.FC = () => {
         <div className='p-3 flex flex-col gap-3 bg-light-bg'>
             <div className='px-2 flex items-center justify-between'>
                 <div>
-                    <h1 className='text-main-text text-2xl'>Welcome back! <span className='text-txt-link'>{userDetails.name}</span></h1>
-                    <h5 className='text-sm my-2 text-txt-sub'>Review your leave request and status of pending request</h5>
+                    <h1 className='text-main-text text-2xl'>Welcome back! <span className='text-txt-link'>{user?.name}</span></h1>
+                    <h5 className='text-sm my-2 text-txt-sub'>Review your leave balance and status of pending request</h5>
                 </div>
-                <button onClick={()=> navigate('/members')} className='text-sm p-2 px-4 bg-button-primary rounded-md hover:bg-button-primary/80'>
-                    Members
-                </button>
+                {user?.role == 'employee' && <button
+                    onClick={() => navigate('/apply')}
+                    className='text-sm p-2 px-4 bg-button-primary rounded-md hover:bg-button-primary/80'>
+                    Apply Leave
+                </button>}
             </div>
             <div className='w-full  h-max flex flex-col lg:flex-row gap-3 flex-wrap'>
                 {
@@ -60,15 +61,16 @@ const Request:React.FC = () => {
                 }
             </div>
             <div className='w-full flex flex-col p-3 gap-4 rounded-lg border border-white/[0.09] bg-gradient-to-br from-white/[0.07] to-transparent backdrop-blur-sm shadow-xl'>
-                <div className='flex items-center justify-between'> 
-                    <h1 className='text-txt-main'>New Leave Request</h1>
+                <div className='flex items-center justify-between px-2'>
+                    <h1 className='text-txt-main'>Recent Leave Request</h1>
+                    <h2 onClick={() => navigate('/history')} className='text-button-primary hover:text-button-primary/70 cursor-pointer'>View all</h2>
                 </div>
                 <div>
-                    <CustomTable data={jsondata['leave']} onCancel={()=> {}} onApprove={()=>{}} role={userDetails.role}/>
+                    <CustomTable data={jsondata['leave']} onCancel={() => { }} onApprove={() => { }} role={userDetails.role} />
                 </div>
             </div>
         </div>
     )
 }
 
-export default Request
+export default UserDashboard

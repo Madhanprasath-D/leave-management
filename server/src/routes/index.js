@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // Controllers
-const { login, signup } = require("../controllers/auth.controller");
+const { login, signup } = require("../controllers/auth.controler");
 const { getUsers } = require("../controllers/user.controller");
 const {
   getLeaves,
@@ -17,11 +17,14 @@ const { authMiddleware } = require("../middleware/auth.middleware");
 router.post("/auth/login", login);
 router.post("/auth/signup", signup);
 
-router.get("/users/:id?", authMiddleware, getUsers);
+router.get("/users", authMiddleware, getUsers);
+router.get("/users/:id", authMiddleware, getUsers);
 
-router.get("/leaves/:id?", authMiddleware, getLeaves);
-router.post("/leaves", authMiddleware, applyLeave);
-router.patch("/leaves/:id", authMiddleware, updateLeave);
+router.get("/leaves", authMiddleware, getLeaves);
+router.get("/leaves/:id", authMiddleware, getLeaves);
+
+router.post("/leaves/apply", authMiddleware, applyLeave);
+router.patch("/leaves/apply/:id", authMiddleware, updateLeave);
 
 router.get("/meta", authMiddleware, getMeta);
 

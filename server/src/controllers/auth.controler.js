@@ -1,8 +1,9 @@
 const authService = require("../services/auth.service");
 
 exports.login = async (req, res) => {
-  try {
+  try {    
     const { email, password } = req.body;
+    console.log(`User ${email} try to login`);
     const result = await authService.login(email, password);
     res.json(result);
   } catch (err) {
@@ -12,6 +13,7 @@ exports.login = async (req, res) => {
 
 exports.signup = async (req, res) => {
   try {
+    console.log('Sign up request')
     const result = await authService.signup(req.body);
     res.status(201).json(result);
   } catch (err) {
