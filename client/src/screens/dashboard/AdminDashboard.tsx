@@ -4,12 +4,15 @@ import { CalendarCheck2, ClipboardClock, LoaderCircle, TicketCheck } from 'lucid
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../../contexts/auth/UserContext'
 import { GetLeaves, UpdateStatus } from '../../invoke/InvokeAPI'
+import { SimpleSnackbar } from '../../components/toast/Toast'
 
 const AdminDashboard = () => {
     const navigate = useNavigate()
     const { user } = useUser()
     const [leaveData, setLeaveData] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false)
+    const [msg, setMsg] = useState('')
     const leaveOverview = [
         {
             label: 'Total leave Request',
@@ -34,11 +37,13 @@ const AdminDashboard = () => {
     const handleChange = async (id: string, isApproved: boolean, msg: string) => {
         try {
             await UpdateStatus(`/leaves/${id}/update`, JSON.stringify({
-                approved: isApproved,
+                approve: isApproved,
                 comment: msg
             }));
             fetchLeaves();
         } catch (err: any) {
+            setOpen(true)
+            setMsg(err.message)
             console.error(err.message);
         }
     };
@@ -48,10 +53,10 @@ const AdminDashboard = () => {
         try {
             const endpoint = `/leaves?status=pending`
             const data = await GetLeaves(endpoint);
-            console.log("Leaves:", data);
             setLeaveData(data);
-        } catch (err) {
-            console.error(err);
+        } catch (err: any) {
+            setMsg(err.message)
+            setOpen(true)
         } finally {
             setLoading(false);
         }
@@ -63,6 +68,12 @@ const AdminDashboard = () => {
 
     return (
         <div className='p-3 flex flex-col gap-3 bg-light-bg'>
+            <SimpleSnackbar
+                open={open}
+                color={'danger'}
+                msg={msg}
+                onClose={() => setOpen(false)}
+            />
             <div className='px-2 flex items-center justify-between'>
                 <div>
                     <h1 className='text-main-text text-2xl'>Welcome back! <span className='text-txt-link'>{user?.name}</span></h1>
@@ -93,7 +104,7 @@ const AdminDashboard = () => {
                     {loading ? <div className='w-full flex items-center justify-between'>
                         <LoaderCircle className=' animate-spin' color='white' />
                     </div> :
-                        <CustomTable data={leaveData}  onCancel={(e) => {}} onUpdate={(id,isApproved, msg) => handleChange(id, isApproved, msg)} role={user?.role as string} />}
+                        <CustomTable data={leaveData} onCancel={(e) => { }} onUpdate={(id, isApproved, msg) => handleChange(id, isApproved, msg)} role={user?.role as string} />}
                 </div>
             </div>
         </div>

@@ -92,8 +92,6 @@ const Apply: React.FC = () => {
                 reason
             };
 
-            console.log("payload:", payload);
-
             await ApplyLeave(payload);
 
             navigate("/dashboard");

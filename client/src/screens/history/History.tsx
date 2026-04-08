@@ -22,7 +22,6 @@ const History: React.FC = () => {
                     endpoint = `/leaves`
                 }
                 const data = await GetLeaves(endpoint);
-                console.log("Leaves:", data);
                 setLeaveData(data.filter((ele: any) => ele.status != 'PENDING'));
             } catch (err) {
                 console.error(err);

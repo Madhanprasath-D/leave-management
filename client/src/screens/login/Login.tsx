@@ -4,21 +4,20 @@ import { useNavigate } from 'react-router-dom'
 import { useUser } from '../../contexts/auth/UserContext'
 import { EyeClosed, LoaderCircle } from 'lucide-react'
 import { UserLogin } from '../../invoke/InvokeAPI'
+import { SimpleSnackbar } from '../../components/toast/Toast'
 
 const Login: React.FC = () => {
     const navigate = useNavigate()
     const { login } = useUser();
-
+    const [open, setOpen] = useState(false)
     const [showPassword, setShowpassword] = useState<boolean>(false)
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const [loading, setLoading] = useState(false);
-
-
+    const [color, setColor] = useState<'primary' | 'neutral' | 'danger' | 'success' | 'warning'>('danger')
     const validate = () => {
         const newErrors: { email?: string; password?: string } = {};
-
         if (!email) {
             newErrors.email = "Email is required";
         } else if (!/\S+@\S+\.\S+/.test(email)) {
@@ -50,35 +49,33 @@ const Login: React.FC = () => {
 
     const handleLogin = async () => {
         if (!validate()) return;
-
         setLoading(true);
-
         try {
-            const res = await UserLogin( JSON.stringify({ email, password }));
-
-            console.log("API response:", res);
-
+            const res = await UserLogin(JSON.stringify({ email, password }));
             const data = await res.data;
-
-            console.log("Parsed data:", data);
-
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
 
             login(data.user);
-
             navigate("/dashboard");
-
         } catch (err: any) {
             console.error("Login error:", err);
-            setErrors({ email: err.message }); 
+            setErrors({ email: err.message })
+            setColor('danger');
+            setOpen(true)
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
     return (
         <div className='w-full h-full flex items-center justify-center '>
+            <SimpleSnackbar
+                open={open}
+                color={color}
+                msg={errors.email ?? errors.password}
+                onClose={() => setOpen(false)}
+            />
             <div className='w-full md:w-1/3 flex flex-col items-center justify-center gap-5 border border-white/[0.09] bg-appbg-section rounded-lg p-4 backdrop-blur-sm shadow-xl'>
                 <div className='flex gap-2 items-center justify-center'>
                     {menu.map((ele) => (
@@ -103,7 +100,7 @@ const Login: React.FC = () => {
                             className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
     focus:ring-2 focus:ring-blue-500 
     focus:border-transparent'
-                            type="text" placeholder='Enter your email address' />
+                            type="email" placeholder='Enter your email address' />
                     </div>
                     <div >
                         {/* TODO: by madhan need to design forget password. */}

@@ -25,8 +25,7 @@ exports.applyLeave = async (req, res) => {
 exports.updateLeave = async (req, res) => {
   try {
     const { id } = req.params;
-    const { approve, comment } = req.body;
-
+    const { approve, comment } = req.body;    
     const result = await leaveService.updateLeaveStatus(
       id,
       approve,

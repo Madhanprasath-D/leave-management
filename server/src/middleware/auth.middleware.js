@@ -2,7 +2,7 @@ const { verifyToken } = require("../utils/jwt");
 
 exports.authMiddleware = (req, res, next) => {
   const access = {
-    "manager": ['/users/' , '/leaves', '/leaves/:id', '/meta', '/users'],
+    "manager": ['/users/' , '/leaves', '/leaves/:id', '/meta', '/users', '/leaves/:id/update'],
     "employee": ['/users/:id', '/leaves/apply', '/leaves', '/leaves/:id', '/leaves/apply/:id', '/meta', '/leaves/:id/cancel']
   }
   try {
@@ -21,8 +21,6 @@ exports.authMiddleware = (req, res, next) => {
 
     // Verify token
     const decoded = verifyToken(token);
-
-    console.log("--- decode", decoded, req.route.path);
     if (!access[decoded.role].includes(req.route.path)){
        throw new Error("Unauthorized");
     }
