@@ -89,7 +89,7 @@ const AdminDashboard = () => {
             <div className='px-2 flex items-center justify-between'>
                 <div>
                     <h1 className='text-main-text text-2xl'>Welcome back! <span className='text-txt-link'>{user?.name}</span></h1>
-                    <h5 className='text-sm my-2 text-txt-sub'>Review your leave request and status of pending request</h5>
+                    <h5 className='text-sm my-2 text-txt-sub hidden md:flex'>Review your leave request and status of pending request</h5>
                 </div>
                 <button onClick={() => navigate('/members')} className='text-sm p-2 px-4 bg-button-primary rounded-md hover:bg-button-primary/80'>
                     Members
