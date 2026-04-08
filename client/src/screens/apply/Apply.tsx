@@ -12,7 +12,7 @@ const Apply: React.FC = () => {
     ];
 
     const customStyles = {
-        control: (base, state) => ({
+        control: (base: any, state: any) => ({
             ...base,
             backgroundColor: "#1e293b",
             borderColor: state.isFocused ? "#3B82F6" : "#334155",
@@ -24,14 +24,14 @@ const Apply: React.FC = () => {
             },
         }),
 
-        menu: (base) => ({
+        menu: (base: any) => ({
             ...base,
             backgroundColor: "#1F263B",
             borderRadius: "8px",
             overflow: "hidden",
         }),
 
-        option: (base, state) => ({
+        option: (base: any, state: any) => ({
             ...base,
             backgroundColor: state.isFocused
                 ? "#1F263B"
@@ -42,17 +42,17 @@ const Apply: React.FC = () => {
             cursor: "pointer",
         }),
 
-        singleValue: (base) => ({
+        singleValue: (base: any) => ({
             ...base,
             color: "white",
         }),
 
-        placeholder: (base) => ({
+        placeholder: (base: any) => ({
             ...base,
             color: "#94A3B8",
         }),
 
-        dropdownIndicator: (base) => ({
+        dropdownIndicator: (base: any) => ({
             ...base,
             color: "#94A3B8",
             "&:hover": {

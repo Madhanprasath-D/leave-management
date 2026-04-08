@@ -1,19 +1,14 @@
-const express = require('express')
-const cors = require('cors')
+const express = require("express");
+const cors = require("cors");
 
-const authRoutes = require("./routers/auth.routers");
+const routes = require("./routers/index");
 
+const app = express();
 
-const app = express()
+app.use(cors());
+app.use(express.json());
 
-app.use(cors({
-    allowedHeaders:[],
-    origin: '*'
-}))
-
-app.use(express.json())
-
-app.use("/api/auth", authRoutes);
+app.use("/api", routes);
 
 const PORT = process.env.PORT || 5000;
 

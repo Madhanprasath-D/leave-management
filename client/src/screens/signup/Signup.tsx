@@ -17,44 +17,49 @@ const Signup: React.FC = (props) => {
     }
   ]
 
-  
+
   return (
     <div className='w-full h-full flex items-center justify-center'>
-      <div className='w-2/3 flex flex-col items-center justify-center gap-3'>
+      <div className='w-2/3 flex flex-col items-center justify-center gap-5  border border-white/[0.09] bg-appbg-section rounded-lg p-4 backdrop-blur-sm shadow-xl'>
         <div className='flex gap-2 items-center justify-center'>
           {menu.map((ele) => (
             <div
               onClick={() => navigate(`/${ele.value}`)}
-              className={location.pathname.includes(ele.value) ? 'border-2 border-gray-200 text-black px-2 py-0.5 rounded-md cursor-pointer' : 'px-2 py-0.5 text-black cursor-pointer'}>
+              className={location.pathname.includes(ele.value) ? ' text-button-primary border border-button-primary px-2 py-0.5 rounded-md cursor-pointer' : 'px-2 py-0.5 text-txt-sub cursor-pointer'}>
               <div className=''></div>
               <h5>{ele.label}</h5>
             </div>
           ))}
         </div>
         <div className='flex flex-col items-center justify-center mt-2 gap-2'>
-          <h2 className='text-2xl font-medium'>Welcome!</h2>
-          <h6 className='text-gray-500 font-medium'>Please enter your details to sign up</h6>
+          <h2 className='text-2xl font-medium text-txt-main'>Welcome back!</h2>
+          <h6 className='text-txt-sub font-medium'>Please enter your details to login</h6>
         </div>
-        <div className='w-full flex flex-col gap-3'>
+        <div className='w-full flex flex-col gap-5'>
           <div >
-            <h6 className='text-sm font-bold text-gray-700 mb-1'>Name</h6>
+            <h6 className='text-sm font-bold  mb-1 text-txt-sub'>Name</h6>
             <input
-              className='p-2 border-2 border-gray-300 w-full rounded-md'
+            className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+  focus:ring-2 focus:ring-blue-500 
+  focus:border-transparent'
               type="text" placeholder='Enter your Name' />
           </div>
 
           <div >
-            <h6 className='text-sm font-bold text-gray-700 mb-1'>Email address</h6>
+            <h6 className='text-sm font-bold text-txt-sub mb-1'>Email address</h6>
             <input
-              className='p-2 border-2 border-gray-300 w-full rounded-md'
+            className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+  focus:ring-2 focus:ring-blue-500 
+  focus:border-transparent'
               type="text" placeholder='Enter your email address' />
           </div>
           <div >
-            {/* TODO: by madhan need to design forget password. */}
-            <h6 className='text-sm font-bold text-gray-700 mb-1'>Password</h6>
+            <h6 className='text-sm font-bold text-txt-sub mb-1'>Password</h6>
             <div className='flex items-center gap-3'>
               <input
-                className='p-2 border-2 border-gray-300 w-full rounded-md'
+              className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+  focus:ring-2 focus:ring-blue-500 
+  focus:border-transparent'
                 type={!showPassword ? 'password' : 'text'} placeholder='Enter your password' />
               <div className='size-4 bg-emerald-300'
                 onClick={() => setShowpassword(!showPassword)}
@@ -63,11 +68,12 @@ const Signup: React.FC = (props) => {
           </div>
 
           <div >
-            {/* TODO: by madhan need to design forget password. */}
-            <h6 className='text-sm font-bold text-gray-700 mb-1'>Confirm password</h6>
+            <h6 className='text-sm font-bold text-txt-sub mb-1'>Confirm password</h6>
             <div className='flex items-center gap-3'>
               <input
-                className='p-2 border-2 border-gray-300 w-full rounded-md'
+              className='p-2 border-2  w-full rounded-md bg-appbg-section border-white/20 text-txt-sub focus:outline-none 
+  focus:ring-2 focus:ring-blue-500 
+  focus:border-transparent'
                 type={!showPassword ? 'password' : 'text'} placeholder='Enter your password' />
               <div className='size-4 bg-emerald-300'
                 onClick={() => setShowpassword(!showPassword)}
@@ -76,13 +82,13 @@ const Signup: React.FC = (props) => {
           </div>
 
           <div className='w-full'>
-            <button className='w-full bg-button hover:bg-button/80 p-2 py-3 rounded-lg font-medium text-white'>
+            <button className='w-full bg-button-primary hover:bg-button/80 p-2 py-3 rounded-lg font-medium text-white'>
               Sign up
             </button>
           </div>
         </div>
         <div>
-          <h5>Already have an account<span className='text-purple-400 cursor-pointer hover:text-purple-600 ml-1 font-medium' onClick={() => navigate('/login')}>Login</span></h5>
+          <h5 className='text-txt-sub'>Already have an account<span className='text-txt-link cursor-pointer hover:text-txt-link:80 ml-1 font-medium' onClick={() => navigate('/login')}>Login</span></h5>
         </div>
       </div>
     </div>
