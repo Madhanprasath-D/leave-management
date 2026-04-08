@@ -1,11 +1,18 @@
-# 🗓️ Leave Management System
+#  Leave Management System
 
 A full-stack employee leave management application built with **React + TypeScript** on the frontend and **Node.js + Express** on the backend, using **PostgreSQL** as the database.
 
 ---
 
+#  Application URL
 
-# 🗓️ Test credentials
+- **lms app(frontend)** — [https://lms-1vq2.onrender.com/](https://lms-1vq2.onrender.com/)
+- **lms app(backend)** — [https://leave-management-4dwy.onrender.com](https://leave-management-4dwy.onrender.com)
+
+---
+
+
+#  Test credentials
 - [ ] To login as MANAGER -> admin@gmail.com / admin@123
 - [ ] To login as USER 1 -> madhan@gmail.com / madhan@14
 - [ ] To login as USER 2 -> prasath@gmail.com / prasath@14
