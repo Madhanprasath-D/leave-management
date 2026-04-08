@@ -13,18 +13,16 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-      <Route path='/' element={<AuthLayout/>}>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='sign-up' element={<Signup/>}/>
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/sign-up" element={<Signup />} />
       </Route>
-      <Route path='/' element={
-        <ProtectedRoute><Layout/></ProtectedRoute>
-      }>
-        <Route path='/dashboard' element={<Dashboard/>}/>
-        <Route path='/apply' element={<Apply/>}/>
-        <Route path='/history' element={<History/>}/>
-        <Route path='/members' element={<Members/>}/>
+
+      <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/apply" element={<Apply />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/members" element={<Members />} />
       </Route>
     </Routes>
   )
